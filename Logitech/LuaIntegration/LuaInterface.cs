@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Logitech {
+namespace Logitech.LuaIntegration {
     public class LuaInterface {
         public static void OutputLogMessage(string message, params object[] args) {
             try {
@@ -17,6 +14,14 @@ namespace Logitech {
         }
         public static void OutputLogMessage(string message) {
             Console.WriteLine(message);
+        }
+
+        public void PressKey(string key) {
+            // TODO:
+        }
+
+        public void SetBacklightColor() {
+            // TODO:
         }
     }
 }

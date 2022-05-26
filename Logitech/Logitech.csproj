@@ -56,7 +56,9 @@
     <Compile Include="InputProviders\LogitechInputProvider.cs" />
     <Compile Include="InputProviders\LogitechGKeys.cs" />
     <Compile Include="InputProviders\InterceptKeys.cs" />
-    <Compile Include="LuaInterface.cs" />
+    <Compile Include="LuaIntegration\LuaEngine.cs" />
+    <Compile Include="LuaIntegration\LuaEventType.cs" />
+    <Compile Include="LuaIntegration\LuaInterface.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Win32.cs" />

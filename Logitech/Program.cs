@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -6,6 +7,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Logitech.InputProviders;
+using Logitech.InputProviders.Args;
+using Logitech.LuaIntegration;
 using NLua;
 
 namespace Logitech {
@@ -13,9 +16,6 @@ namespace Logitech {
         private static volatile bool isRunning = true;
 
 
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
         static void Main(string[] args) {
             InterceptKeys nativeKeyboardHook = new InterceptKeys();
             try {
@@ -36,24 +36,35 @@ namespace Logitech {
 
 
                 new Thread(() => {
-                    const string Hardcoded = @"
-                               import ('Logitech')
-                               OutputLogMessage = LuaInterface.OutputLogMessage";
-                    using (Lua lua = new Lua()) {
-                        lua.State.Encoding = Encoding.UTF8;
-                        lua.LoadCLRPackage();
-                        lua.DoString(Hardcoded + @"
+                    var script = @"
 
-                            function OnEvent(event, arg)
-                                OutputLogMessage('testytest: {0}', 5)
+                            function OnEvent(event, arg, modifiers)
+                                if event == LuaEventType.Input then
+                                    OutputLogMessage('testytest: {0}, {1}, {2}, {3}', 5, event, arg, modifiers)
+                                end
                             end
-                        ");
+                        ";
 
-                        var onEvent = lua["OnEvent"] as LuaFunction;
+                    using (LuaEngine engine = new LuaEngine(script)) {
+                        ConcurrentQueue<InputEventArg> _eventQueue = new ConcurrentQueue<InputEventArg>();
                         
+                        logitechInputProvider.OnInput += (_, e) => {
+                            var arg = e as InputEventArg;
+                            _eventQueue.Enqueue(arg);
+                        };
+
+                        InterceptKeys.OnInput += (_, e) => {
+                            var arg = e as InputEventArg;
+                            _eventQueue.Enqueue(arg);
+                        };
+
+
                         while (isRunning) {
                             Thread.Sleep(1);
-                           // onEvent.Call(null, null);
+                            if (_eventQueue.TryDequeue(out var arg)) {
+                                engine.OnEvent(LuaEventType.Input, arg.Key, arg.Modifiers);
+                            }
+                            engine.OnEvent(LuaEventType.Tick, null, null);
 
                         }
                     }

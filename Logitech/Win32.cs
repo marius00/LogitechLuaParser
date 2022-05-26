@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,13 +10,18 @@ namespace Logitech {
         // The GetForegroundWindow function returns a handle to the foreground window
         // (the window  with which the user is currently working).
         [System.Runtime.InteropServices.DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
+        public static extern IntPtr GetForegroundWindow();
+
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         // The GetWindowThreadProcessId function retrieves the identifier of the thread
         // that created the specified window and, optionally, the identifier of the
         // process that created the window.
         [System.Runtime.InteropServices.DllImport("user32.dll")]
-        private static extern Int32 GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        public static extern Int32 GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         // Returns the name of the process owning the foreground window.
         public static string GetForegroundProcessName() {
