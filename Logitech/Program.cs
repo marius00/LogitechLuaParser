@@ -30,51 +30,66 @@ namespace Logitech {
                 logitechInputProvider.Start();
                 ledProvider.Start();
 
-                /*
-                Process p = Process.GetProcessesByName("mIRC").FirstOrDefault();
-                if (p != null) {
-                    IntPtr h = p.MainWindowHandle;
-                    SetForegroundWindow(h);
-                    SendKeys.SendWait("kkkkk");
-                }*/
-
-                ledProvider.SetColor("G9", 100, 0, 0);
-
 
                 new Thread(() => {
                     var script = @"
+                            SetBacklightColor('W', 0, 100, 0)
+                            SetBacklightColor('S', 0, 100, 0)
 
+                            spam = false
                             function OnEvent(event, arg, modifiers)
+                                if event == LuaEventType.Tick then
+                                    if spam then
+                                        SendKeys('spammyspam')
+                                    end
+                                end
                                 if event == LuaEventType.Input then
-                                    OutputLogMessage('testytest: {0}, {1}, {2}, {3}', 5, event, arg, modifiers)
                                     if arg == 'G9' then
                                         OutputLogMessage('Yep its G9')
-                                        SetBacklightColor('G9', 100, 0, 0)
+                                        SetBacklightColor(arg, 100, 0, 0)
+                                        SendKeys('Haha!')
+                                    end
+                                    if arg == 'G8' then
+                                        spam = not spam
+                                        OutputLogMessage('Spam mode is: {0}', spam)
+                                        if spam then
+                                            SetBacklightColor(arg, 0, 100, 0)
+                                        else
+                                            SetBacklightColor(arg, 0, 0, 0)
+                                        end
                                     end
                                 end
                             end
                         ";
 
-                    using (LuaEngine engine = new LuaEngine(ledProvider, script)) {
+                    const string desiredProcess = "Notepad";
+
+                    using (LuaEngine engine = new LuaEngine(ledProvider, desiredProcess, script)) {
                         ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
+
                         
                         logitechInputProvider.OnInput += (_, e) => {
                             var arg = e as InputEventArg;
-                            eventQueue.Enqueue(arg);
+                            if (Win32.GetForegroundProcessName().Equals(desiredProcess, StringComparison.CurrentCultureIgnoreCase))
+                                eventQueue.Enqueue(arg);
                         };
 
                         InterceptKeys.OnInput += (_, e) => {
                             var arg = e as InputEventArg;
-                            eventQueue.Enqueue(arg);
+                            if (Win32.GetForegroundProcessName().Equals(desiredProcess, StringComparison.CurrentCultureIgnoreCase))
+                                eventQueue.Enqueue(arg);
                         };
 
 
                         while (isRunning) {
                             Thread.Sleep(1);
-                            if (eventQueue.TryDequeue(out var arg)) {
-                                engine.OnEvent(LuaEventType.Input, arg.Key, arg.Modifiers);
+                            if (Win32.GetForegroundProcessName().Equals(desiredProcess, StringComparison.CurrentCultureIgnoreCase)) {
+                                while (eventQueue.TryDequeue(out var arg)) {
+                                    engine.OnEvent(LuaEventType.Input, arg.Key, arg.Modifiers);
+                                }
+
+                                engine.OnEvent(LuaEventType.Tick, null, null);
                             }
-                            engine.OnEvent(LuaEventType.Tick, null, null);
 
                         }
                     }
@@ -88,6 +103,8 @@ namespace Logitech {
                 nativeKeyboardHook.Dispose();
                 ledProvider.Dispose();
             }
+
+            Logger.Info("LogiLed terminated");
         }
     }
     /*

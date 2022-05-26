@@ -137,9 +137,6 @@ namespace Logitech.Led {
 
         private bool _isInitialized;
 
-        public LogitechLedProvider() {
-
-        }
 
         public void Start() {
             _isInitialized = LogitechGSDK.LogiLedInitWithName("LogitechLua");
@@ -147,7 +144,7 @@ namespace Logitech.Led {
                 LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
             }
             else {
-                Console.WriteLine("Error initializing logitech LED driver");
+                Logger.Warn("Error initializing logitech LED driver");
             }
         }
 
@@ -166,6 +163,7 @@ namespace Logitech.Led {
                 Logger.Warn("Attempting to set keyboard colors, but LED api is not initialized");
             }
             else {
+                Logger.Debug($"Setting color for {key} to ({r}, {g}, {b})");
                 LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(_keyMapping[key], r, g, b);
             }
         }

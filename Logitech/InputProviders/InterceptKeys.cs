@@ -38,7 +38,7 @@ namespace Logitech.InputProviders {
             int nCode, IntPtr wParam, IntPtr lParam) {
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN) {
                 int vkCode = Marshal.ReadInt32(lParam);
-                Console.WriteLine((Keys)vkCode);
+                // Console.WriteLine((Keys)vkCode);
                 OnInput?.Invoke(null, new InputEventArg {
                     Key = ((Keys)vkCode).ToString() // TODO: Support for CTRL, Shift, Alt
                 });

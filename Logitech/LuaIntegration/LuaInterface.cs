@@ -12,6 +12,7 @@ namespace Logitech.LuaIntegration {
 
             }
         }
+
         public static void OutputLogMessage(string message) {
             Console.WriteLine(message);
         }

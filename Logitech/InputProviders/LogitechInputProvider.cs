@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
 using Logitech.InputProviders.Args;
+using Logitech.LuaIntegration;
 
 namespace Logitech.InputProviders {
     internal class LogitechInputProvider : IDisposable {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(LogitechInputProvider));
         private const int MaxGKeys = 29; // G1 G2 G...
         private const int MaxGStates = 3; // M1 M2 M3
 
@@ -19,8 +22,10 @@ namespace Logitech.InputProviders {
 
         public void Start() {
             new Thread(() => {
-                int r = LogitechGKeys.LogiGkeyInitWithoutCallback();
-                Console.WriteLine($"Logitech Init result: {r}");
+                if (LogitechGKeys.LogiGkeyInitWithoutCallback() == 0) {
+                    Logger.Error("Could not initialize logitech input provider, G-keys are disabled");
+                    return;
+                }
 
                 while (_isRunning) {
                     Thread.Sleep(1);
@@ -32,7 +37,7 @@ namespace Logitech.InputProviders {
 
                                 // Limit it to 1 event per click (No support for holding down G keys for the moment)
                                 if (!GetLastState(uniqueKey)) {
-                                    Console.WriteLine($"G{key} M{state} {Win32.GetForegroundProcessName()}");
+                                    // Console.WriteLine($"G{key} M{state} {Win32.GetForegroundProcessName()}");
 
                                     OnInput?.Invoke(this, new InputEventArg {
                                         Key = $"G{key}",
