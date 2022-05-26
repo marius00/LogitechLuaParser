@@ -9,6 +9,7 @@ using System.Threading;
 using log4net;
 using Logitech.InputProviders;
 using Logitech.InputProviders.Args;
+using Logitech.Led;
 using Logitech.LuaIntegration;
 using NLua;
 
@@ -21,11 +22,13 @@ namespace Logitech {
         static void Main(string[] args) {
             Logger.Info("Starting LogiLed..");
             InterceptKeys nativeKeyboardHook = new InterceptKeys();
+            LogitechLedProvider ledProvider = new LogitechLedProvider();
             try {
 
                 nativeKeyboardHook.Start();
                 LogitechInputProvider logitechInputProvider = new LogitechInputProvider();
                 logitechInputProvider.Start();
+                ledProvider.Start();
 
                 /*
                 Process p = Process.GetProcessesByName("mIRC").FirstOrDefault();
@@ -35,7 +38,7 @@ namespace Logitech {
                     SendKeys.SendWait("kkkkk");
                 }*/
 
-
+                ledProvider.SetColor("G9", 100, 0, 0);
 
 
                 new Thread(() => {
@@ -44,11 +47,15 @@ namespace Logitech {
                             function OnEvent(event, arg, modifiers)
                                 if event == LuaEventType.Input then
                                     OutputLogMessage('testytest: {0}, {1}, {2}, {3}', 5, event, arg, modifiers)
+                                    if arg == 'G9' then
+                                        OutputLogMessage('Yep its G9')
+                                        SetBacklightColor('G9', 100, 0, 0)
+                                    end
                                 end
                             end
                         ";
 
-                    using (LuaEngine engine = new LuaEngine(script)) {
+                    using (LuaEngine engine = new LuaEngine(ledProvider, script)) {
                         ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
                         
                         logitechInputProvider.OnInput += (_, e) => {
@@ -79,6 +86,7 @@ namespace Logitech {
                 logitechInputProvider.Dispose();
             } finally {
                 nativeKeyboardHook.Dispose();
+                ledProvider.Dispose();
             }
         }
     }
