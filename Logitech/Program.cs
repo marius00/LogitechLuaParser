@@ -46,22 +46,22 @@ namespace Logitech {
                         ";
 
                     using (LuaEngine engine = new LuaEngine(script)) {
-                        ConcurrentQueue<InputEventArg> _eventQueue = new ConcurrentQueue<InputEventArg>();
+                        ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
                         
                         logitechInputProvider.OnInput += (_, e) => {
                             var arg = e as InputEventArg;
-                            _eventQueue.Enqueue(arg);
+                            eventQueue.Enqueue(arg);
                         };
 
                         InterceptKeys.OnInput += (_, e) => {
                             var arg = e as InputEventArg;
-                            _eventQueue.Enqueue(arg);
+                            eventQueue.Enqueue(arg);
                         };
 
 
                         while (isRunning) {
                             Thread.Sleep(1);
-                            if (_eventQueue.TryDequeue(out var arg)) {
+                            if (eventQueue.TryDequeue(out var arg)) {
                                 engine.OnEvent(LuaEventType.Input, arg.Key, arg.Modifiers);
                             }
                             engine.OnEvent(LuaEventType.Tick, null, null);

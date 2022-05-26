@@ -12,7 +12,7 @@ namespace Logitech.InputProviders {
         private const int MaxGStates = 3; // M1 M2 M3
 
         private volatile bool _isRunning = true;
-        private Dictionary<int, bool> _state = new Dictionary<int, bool>(MaxGKeys);
+        private readonly Dictionary<string, bool> _state = new Dictionary<string, bool>(MaxGKeys);
 
         public event EventHandler OnInput;
 
@@ -27,9 +27,11 @@ namespace Logitech.InputProviders {
 
                     for (int key = 1; key <= MaxGKeys; key++) {
                         for (int state = 1; state <= MaxGStates; state++) {
+                            var uniqueKey = $"G{key} M{state}";
                             if (LogitechGKeys.LogiGkeyIsKeyboardGkeyPressed(key, state) != 0) {
+
                                 // Limit it to 1 event per click (No support for holding down G keys for the moment)
-                                if (!GetLastState(key)) {
+                                if (!GetLastState(uniqueKey)) {
                                     Console.WriteLine($"G{key} M{state} {Win32.GetForegroundProcessName()}");
 
                                     OnInput?.Invoke(this, new InputEventArg {
@@ -37,9 +39,12 @@ namespace Logitech.InputProviders {
                                         Modifiers = new String[] {$"M{state}"}// TODO: Support for CTRL, Shift, Alt
                                     });
                                 }
-                            }
 
-                            _state[key] = false;
+                                _state[uniqueKey] = true;
+                            }
+                            else {
+                                _state[uniqueKey] = false;
+                            }
                         }
 
                     }
@@ -49,7 +54,7 @@ namespace Logitech.InputProviders {
             }).Start();
         }
 
-        private bool GetLastState(int key) {
+        private bool GetLastState(string key) {
             if (_state.ContainsKey(key))
                 return _state[key];
 
