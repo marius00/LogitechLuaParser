@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using log4net;
 using Logitech.InputProviders;
 using Logitech.InputProviders.Args;
 using Logitech.LuaIntegration;
@@ -14,9 +15,11 @@ using NLua;
 namespace Logitech {
     internal class Program {
         private static volatile bool isRunning = true;
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
 
         static void Main(string[] args) {
+            Logger.Info("Starting LogiLed..");
             InterceptKeys nativeKeyboardHook = new InterceptKeys();
             try {
 

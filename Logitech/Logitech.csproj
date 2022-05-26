@@ -38,11 +38,16 @@
     <Reference Include="KeraLua, Version=1.3.1.0, Culture=neutral, PublicKeyToken=6a194c04b9c89217, processorArchitecture=MSIL">
       <HintPath>..\packages\KeraLua.1.3.1\lib\net46\KeraLua.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.14\lib\net45\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="NLua, Version=1.6.0.0, Culture=neutral, PublicKeyToken=6a194c04b9c89217, processorArchitecture=MSIL">
       <HintPath>..\packages\NLua.1.6.0\lib\net46\NLua.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,6 +61,9 @@
     <Compile Include="InputProviders\LogitechInputProvider.cs" />
     <Compile Include="InputProviders\LogitechGKeys.cs" />
     <Compile Include="InputProviders\InterceptKeys.cs" />
+    <Compile Include="Led\LogitechGSDK.cs" />
+    <Compile Include="Led\LogitechKeyMapping.cs" />
+    <Compile Include="Led\LogitechLedProvider.cs" />
     <Compile Include="LuaIntegration\LuaEngine.cs" />
     <Compile Include="LuaIntegration\LuaEventType.cs" />
     <Compile Include="LuaIntegration\LuaInterface.cs" />
@@ -65,10 +73,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LogitechGkeyEnginesWrapper.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LogitechLedEnginesWrapper.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

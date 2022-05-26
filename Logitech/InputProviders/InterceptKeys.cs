@@ -40,7 +40,7 @@ namespace Logitech.InputProviders {
                 int vkCode = Marshal.ReadInt32(lParam);
                 Console.WriteLine((Keys)vkCode);
                 OnInput?.Invoke(null, new InputEventArg {
-                    Key = ((Keys)vkCode).ToString()
+                    Key = ((Keys)vkCode).ToString() // TODO: Support for CTRL, Shift, Alt
                 });
             }
             else {
