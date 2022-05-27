@@ -13,6 +13,8 @@ OutputLogMessage('Starting script with W and S being Green')
 -- MouseDown('RMB')
 -- MouseUp('RMB')
 
+-- MouseMove(15, 0)
+
 -- OutputLogMessage('{0}', time()) -- Time in milliseconds
 -- Sleep(2000)
 -- OutputLogMessage('{0}', time())

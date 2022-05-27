@@ -58,6 +58,10 @@ function MouseDoubleClick(key)
     provider:MouseDoubleClick(key)
 end
 
+function MouseMove(x, y)
+    provider:MouseMove(x, y)
+end
+
 function Sleep(ms)
     provider:Sleep(ms)
 end
@@ -107,6 +111,9 @@ FocusEvent = LuaEventType.Focus
                 _ledProvider.SetColor(key, r, g, b);
         }
 
+        public void MouseMove(int x, int y) {
+            _simulator.Mouse.MoveMouseBy(x, y);
+        }
 
         public void MouseDown(string key) {
             if (key == "LMB") {
