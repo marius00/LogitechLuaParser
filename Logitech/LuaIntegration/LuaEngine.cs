@@ -227,7 +227,7 @@ FocusEvent = LuaEventType.Focus
 
         public void OnEvent(LuaEventType eventType, string arg, string[] modifiers) {
             try {
-                _onEvent.Call(eventType, arg, modifiers);
+                _onEvent?.Call(eventType, arg, modifiers);
             }
             catch (NLua.Exceptions.LuaScriptException ex) {
                 Logger.Error("Error executing script");

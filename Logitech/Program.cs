@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Threading;
+using InputSimulatorStandard;
 using log4net;
 using Logitech.Config;
 using Logitech.InputProviders;
@@ -24,6 +25,9 @@ namespace Logitech {
         static void Main(string[] args) {
             Logger.Info("Starting LogiLed..");
             CopyInitialFiles();
+
+            var xxx = new WindowsInputDeviceStateAdapter();
+
 
             List<IDisposable> disposables = new List<IDisposable>();
 
@@ -51,8 +55,14 @@ namespace Logitech {
                     ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
 
                     void HandleInputEvent(object _, InputEventArg arg) {
-                        if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName()))
+                        if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName())) {
+
+                            if (KeyMapper.IsValidKeyCode(arg.Key)) {
+                                Logger.Debug($"IsRealKey: {xxx.IsHardwareKeyDown(KeyMapper.TranslateToKeyCode(arg.Key))}");
+                            }
+
                             eventQueue.Enqueue(arg);
+                        }
                         else {
                             Logger.Debug($"Ignoring key event, process: {Win32.GetForegroundProcessName()}");
                         }
@@ -127,7 +137,7 @@ namespace Logitech {
                             if (p != null) {
                                 var exe = p.MainModule.FileName;
                                 p.Kill();
-                                Process.Start(exe);
+                                Process.Start(exe, "/minimized");
                             }
                         }
                         catch (Exception ex) {
@@ -145,6 +155,14 @@ namespace Logitech {
                 Logger.Warn(ex.Message, ex);
             }
 
+            {
+                Process p = Process.GetProcessesByName("LCore").FirstOrDefault();
+                if (p != null) {
+                    var exe = p.MainModule.FileName;
+                    p.Kill();
+                    Process.Start(exe, "/minimized");
+                }
+            }
 
 
         }
