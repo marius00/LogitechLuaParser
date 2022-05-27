@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -23,10 +24,6 @@ OutputLogMessage = LuaInterface.OutputLogMessage
 
 function SetBacklightColor(k, r, g, b)
     provider:SetColor(k, r, g, b)
-end
-
-function SendKeys(keys)
-    provider:SendInput(keys)
 end
 
 function KeyUp(key)
@@ -81,12 +78,11 @@ FocusEvent = LuaEventType.Focus
         private Lua _lua;
         private LuaFunction _onEvent;
         private readonly LogitechLedProvider _ledProvider;
-        private readonly string _target;
+        private readonly List<string> _targets = new List<string>();
         private readonly InputSimulator _simulator = new InputSimulator();
 
-        public LuaEngine(LogitechLedProvider ledProvider, string target, string script) {
+        public LuaEngine(LogitechLedProvider ledProvider, string script) {
             _ledProvider = ledProvider;
-            _target = target;
 
             ResetState();
             SetScript(script);
@@ -100,34 +96,17 @@ FocusEvent = LuaEventType.Focus
             _lua["provider"] = this;
         }
 
+        public void AddTarget(string target) {
+            _targets.Add(target);
+        }
+
+        private bool HasFocus => _targets.Any(m => m.Equals(Win32.GetForegroundProcessName(), StringComparison.CurrentCultureIgnoreCase));
+
         public void SetColor(string key, int r, int g, int b) {
-            if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase))
+            if (HasFocus)
                 _ledProvider.SetColor(key, r, g, b);
         }
 
-        // TODO: Ideally I'd like to wrap these somehow.. so they're public to LAU but not to C#..
-        public void SendInput(string keys) {
-            if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
-                Process p = Process.GetProcessesByName(_target).FirstOrDefault();
-                if (p != null) {
-                    IntPtr h = p.MainWindowHandle;
-                    Win32.SetForegroundWindow(h);
-                    SendKeys.SendWait(keys);
-                }
-            }
-        }
-
-        // https://github.com/GregsStack/InputSimulatorStandard
-        public void KeyDown(string key) {
-            if (KeyMapper.IsValidKeyCode(key)) {
-                if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
-                    _simulator.Keyboard.KeyDown(KeyMapper.TranslateToKeyCode(key));
-                }
-            }
-            else {
-                Logger.Warn($"Invalid key \"{key}\"");
-            }
-        }
 
         public void MouseDown(string key) {
             if (key == "LMB") {
@@ -175,12 +154,27 @@ FocusEvent = LuaEventType.Focus
             } else {
                 Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
             }
+
+
         }
 
 
+
+        // https://github.com/GregsStack/InputSimulatorStandard
+        public void KeyDown(string key) {
+            if (KeyMapper.IsValidKeyCode(key)) {
+                _simulator.Keyboard.KeyDown(KeyMapper.TranslateToKeyCode(key));
+                if (HasFocus) {
+                    _simulator.Keyboard.KeyDown(KeyMapper.TranslateToKeyCode(key));
+                }
+            } else {
+                Logger.Warn($"Invalid key \"{key}\"");
+            }
+        }
+
         public void KeyUp(string key) {
             if (KeyMapper.IsValidKeyCode(key)) {
-                if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
+                if (HasFocus) {
                     _simulator.Keyboard.KeyUp(KeyMapper.TranslateToKeyCode(key));
                 }
             }
@@ -191,7 +185,7 @@ FocusEvent = LuaEventType.Focus
 
         public void KeyPress(string key) {
             if (KeyMapper.IsValidKeyCode(key)) {
-                if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
+                if (HasFocus) {
                     _simulator.Keyboard.KeyPress(KeyMapper.TranslateToKeyCode(key));
                 }
             }
@@ -210,6 +204,7 @@ FocusEvent = LuaEventType.Focus
 
         public bool SetScript(string script) {
             try {
+                _onEvent = null;
                 _lua.DoString(Hardcoded + script);
                 _onEvent = _lua["OnEvent"] as LuaFunction;
                 return true;

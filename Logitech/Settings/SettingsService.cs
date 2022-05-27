@@ -46,10 +46,11 @@ namespace Logitech.Settings {
 
                         // May have multiple references to a single script
                         if (!_luaScriptFromFilename.ContainsKey(entry.Path.ToLower())) {
-                            var engine = new LuaEngine(_ledProvider, entry.Process, script);
+                            var engine = new LuaEngine(_ledProvider, script);
                             _luaScriptFromFilename[entry.Path.ToLower()] = engine;
                         }
                         _luaScriptFromProcess[entry.Process] = _luaScriptFromFilename[entry.Path.ToLower()];
+                        _luaScriptFromProcess[entry.Process].AddTarget(entry.Process);
                         Logger.Debug($"Configured \"{entry.Path}\" for \"{entry.Process}\"");
                     }
                     catch (IOException ex) {

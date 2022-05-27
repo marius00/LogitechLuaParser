@@ -22,10 +22,6 @@ namespace Logitech {
             Logger.Info("Starting LogiLed..");
             CopyInitialFiles();
 
-
-            // KeyMapper.Validate();
-            // return;
-
             List<IDisposable> disposables = new List<IDisposable>();
 
             InterceptKeys nativeKeyboardHook = new InterceptKeys();
@@ -54,6 +50,9 @@ namespace Logitech {
                     void HandleInputEvent(object _, InputEventArg arg) {
                         if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName()))
                             eventQueue.Enqueue(arg);
+                        else {
+                            Logger.Debug($"Ignoring key event, process: {Win32.GetForegroundProcessName()}");
+                        }
                     }
 
                     logitechInputProvider.OnInput += HandleInputEvent;
@@ -133,19 +132,19 @@ namespace Logitech {
 
         /*
          Desired functionality:
-         * Cancel script on alt+tab / tab out of game
-         * Reset/restart script (LUA)
-         * Detect G-keys
-         * Detect regular keys
-         * Detect modifiers (Alt, Shift, Ctrl)
-         * Able to set colors on G910
-         * Able to HOLD keys
-         * Able to SPAM keys
+         / Reset/restart script (LUA)
+         / Detect G-keys
+         / Detect regular keys
+         / Able to set colors on G910
+         / Able to HOLD keys
+         / Able to SPAM keys
+         / Able to hold LMB/RMB
+         / Able to spam LMB/RMB
          * G-Macro support?
-         *
-         * v2:
-         * Able to hold LMB/RMB
-         * Able to spam LMB/RMB
+         * Detect modifiers (Alt, Shift, Ctrl)
+         * Cancel script on alt+tab / tab out of game
+         * Ability to run with "no application" ?
+         * Auto add a profile for running the tool
          *
          */
     }
