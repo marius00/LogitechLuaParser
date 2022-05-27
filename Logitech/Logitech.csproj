@@ -69,6 +69,7 @@
     <Compile Include="InputProviders\LogitechInputProvider.cs" />
     <Compile Include="InputProviders\LogitechGKeys.cs" />
     <Compile Include="InputProviders\InterceptKeys.cs" />
+    <Compile Include="KeyMapper.cs" />
     <Compile Include="Led\LogitechGSDK.cs" />
     <Compile Include="Led\LogitechKeyMapping.cs" />
     <Compile Include="Led\LogitechLedProvider.cs" />

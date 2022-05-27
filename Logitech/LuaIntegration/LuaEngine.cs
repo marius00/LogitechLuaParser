@@ -15,21 +15,57 @@ namespace Logitech.LuaIntegration {
     /// </summary>
     internal class LuaEngine : IDisposable {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LuaEngine));
+
         const string Hardcoded = @"
 import ('Logitech', 'Logitech.LuaIntegration')
 OutputLogMessage = LuaInterface.OutputLogMessage
 
 function SetBacklightColor(k, r, g, b)
-provider:SetColor(k, r, g, b)
+    provider:SetColor(k, r, g, b)
 end
 
 function SendKeys(keys)
-provider:SendInput(keys)
+    provider:SendInput(keys)
 end
+
+function KeyUp(key)
+    provider:KeyUp(key)
+end
+
+function KeyDown(key)
+    provider:KeyDown(key)
+end
+
+function KeyPress(key)
+    provider:KeyPress(key)
+end
+
+function ResetScript()
+    provider:ResetState()
+end
+
+function MouseDown(key)
+    provider:MouseDown(key)
+end
+
+function MouseUp(key)
+    provider:MouseUp(key)
+end
+
+function MouseClick(key)
+    provider:MouseClick(key)
+end
+
+function MouseDoubleClick(key)
+    provider:MouseDoubleClick(key)
+end
+
+
 
 TickEvent = LuaEventType.Tick
 InputEvent = LuaEventType.Input
 FocusEvent = LuaEventType.Focus
+
                     ";
 
         private Lua _lua;
@@ -46,7 +82,7 @@ FocusEvent = LuaEventType.Focus
             SetScript(script);
         }
 
-        private void ResetState() {
+        public void ResetState() {
             _lua?.Dispose();
             _lua = new Lua();
             _lua.State.Encoding = Encoding.UTF8;
@@ -62,7 +98,6 @@ FocusEvent = LuaEventType.Focus
         // TODO: Ideally I'd like to wrap these somehow.. so they're public to LAU but not to C#..
         public void SendInput(string keys) {
             if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
-
                 Process p = Process.GetProcessesByName(_target).FirstOrDefault();
                 if (p != null) {
                     IntPtr h = p.MainWindowHandle;
@@ -74,21 +109,84 @@ FocusEvent = LuaEventType.Focus
 
         // https://github.com/GregsStack/InputSimulatorStandard
         public void KeyDown(string key) {
-            if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
-                _simulator.Keyboard.KeyDown(VirtualKeyCode.SHIFT); // TODO: Key mapping
-                // _simulator.Mouse.LeftButtonClick()
+            if (KeyMapper.IsValidKeyCode(key)) {
+                if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
+                    _simulator.Keyboard.KeyDown(KeyMapper.TranslateToKeyCode(key));
+                }
+            }
+            else {
+                Logger.Warn($"Invalid key \"{key}\"");
             }
         }
 
+        public void MouseDown(string key) {
+            if (key == "LMB") {
+                _simulator.Mouse.LeftButtonDown();
+            } else if (key == "RMB") {
+                _simulator.Mouse.RightButtonDown();
+            } else if (key == "MMB") {
+                _simulator.Mouse.MiddleButtonDown();
+            } else {
+                Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
+            }
+        }
+
+        public void MouseUp(string key) {
+            if (key == "LMB") {
+                _simulator.Mouse.LeftButtonUp();
+            } else if (key == "RMB") {
+                _simulator.Mouse.RightButtonUp();
+            } else if (key == "MMB") {
+                _simulator.Mouse.MiddleButtonUp();
+            } else {
+                Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
+            }
+        }
+
+        public void MouseClick(string key) {
+            if (key == "LMB") {
+                _simulator.Mouse.LeftButtonClick();
+            } else if (key == "RMB") {
+                _simulator.Mouse.RightButtonClick();
+            } else if (key == "MMB") {
+                _simulator.Mouse.MiddleButtonClick();
+            } else {
+                Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
+            }
+        }
+
+        public void MouseDoubleClick(string key) {
+            if (key == "LMB") {
+                _simulator.Mouse.LeftButtonDoubleClick();
+            } else if (key == "RMB") {
+                _simulator.Mouse.RightButtonDoubleClick();
+            } else if (key == "MMB") {
+                _simulator.Mouse.MiddleButtonDoubleClick();
+            } else {
+                Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
+            }
+        }
+
+
         public void KeyUp(string key) {
-            if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
-                _simulator.Keyboard.KeyUp(VirtualKeyCode.SHIFT); // TODO: Key mapping
+            if (KeyMapper.IsValidKeyCode(key)) {
+                if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
+                    _simulator.Keyboard.KeyUp(KeyMapper.TranslateToKeyCode(key));
+                }
+            }
+            else {
+                Logger.Warn($"Invalid key \"{key}\"");
             }
         }
 
         public void KeyPress(string key) {
-            if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
-                _simulator.Keyboard.KeyPress(VirtualKeyCode.SHIFT); // TODO: Key mapping
+            if (KeyMapper.IsValidKeyCode(key)) {
+                if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
+                    _simulator.Keyboard.KeyPress(KeyMapper.TranslateToKeyCode(key));
+                }
+            }
+            else {
+                Logger.Warn($"Invalid key \"{key}\"");
             }
         }
 
@@ -97,7 +195,8 @@ FocusEvent = LuaEventType.Focus
                 _lua.DoString(Hardcoded + script);
                 _onEvent = _lua["OnEvent"] as LuaFunction;
                 return true;
-            } catch (NLua.Exceptions.LuaScriptException ex) {
+            }
+            catch (NLua.Exceptions.LuaScriptException ex) {
                 Logger.Error("Error parsing script");
                 Logger.Error(ex.Message, ex);
             }
@@ -105,13 +204,16 @@ FocusEvent = LuaEventType.Focus
             return false;
         }
 
+
         public void OnEvent(LuaEventType eventType, string arg, string[] modifiers) {
             try {
                 _onEvent.Call(eventType, arg, modifiers);
-            } catch (NLua.Exceptions.LuaScriptException ex) {
+            }
+            catch (NLua.Exceptions.LuaScriptException ex) {
                 Logger.Error("Error executing script");
                 Logger.Error(ex.Message, ex);
-            } catch (NLua.Exceptions.LuaException ex) {
+            }
+            catch (NLua.Exceptions.LuaException ex) {
                 Logger.Error("Error executing script");
                 Logger.Error(ex.Message, ex);
             }

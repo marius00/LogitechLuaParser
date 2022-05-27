@@ -23,6 +23,9 @@ namespace Logitech {
             Logger.Info("Starting LogiLed..");
             CopyInitialFiles();
 
+            // KeyMapper.Validate();
+            // return;
+
             List<IDisposable> disposables = new List<IDisposable>();
 
             InterceptKeys nativeKeyboardHook = new InterceptKeys();
