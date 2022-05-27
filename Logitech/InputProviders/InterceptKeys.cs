@@ -5,6 +5,10 @@ using System.Windows.Forms;
 using Logitech.InputProviders.Args;
 
 namespace Logitech.InputProviders {
+    /// <summary>
+    /// Keyboard hook for global key events
+    /// Regular keys only (No support for Logitech G-keys etc)
+    /// </summary>
     class InterceptKeys : IDisposable {
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
@@ -14,7 +18,7 @@ namespace Logitech.InputProviders {
         private static IntPtr _hookId = IntPtr.Zero;
 
 
-        public static event EventHandler OnInput;
+        public static event InputEventHandler OnInput;
 
         public void Start() {
             _hookId = SetHook(_proc);

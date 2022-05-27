@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,101 +8,88 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using log4net;
+using Logitech.Config;
 using Logitech.InputProviders;
 using Logitech.InputProviders.Args;
 using Logitech.Led;
 using Logitech.LuaIntegration;
+using Logitech.Settings;
 using NLua;
 
 namespace Logitech {
     internal class Program {
         private static volatile bool isRunning = true;
+        private static volatile bool isLuaThreadRunning = false;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
 
         static void Main(string[] args) {
             Logger.Info("Starting LogiLed..");
-            InterceptKeys nativeKeyboardHook = new InterceptKeys();
-            LogitechLedProvider ledProvider = new LogitechLedProvider();
-            try {
+            List<IDisposable> disposables = new List<IDisposable>();
 
+            InterceptKeys nativeKeyboardHook = new InterceptKeys();
+            disposables.Add(nativeKeyboardHook);
+
+            LogitechLedProvider ledProvider = new LogitechLedProvider();
+            disposables.Add(ledProvider);
+
+            SettingsService settingsService = new SettingsService(ledProvider);
+            disposables.Add(settingsService);
+
+            LogitechInputProvider logitechInputProvider = new LogitechInputProvider();
+            disposables.Add(logitechInputProvider);
+
+            try {
                 nativeKeyboardHook.Start();
-                LogitechInputProvider logitechInputProvider = new LogitechInputProvider();
-                logitechInputProvider.Start();
                 ledProvider.Start();
+                logitechInputProvider.Start();
 
 
                 new Thread(() => {
-                    var script = @"
-                            SetBacklightColor('W', 0, 100, 0)
-                            SetBacklightColor('S', 0, 100, 0)
-
-                            spam = false
-                            function OnEvent(event, arg, modifiers)
-                                if event == LuaEventType.Tick then
-                                    if spam then
-                                        SendKeys('spammyspam')
-                                    end
-                                end
-                                if event == LuaEventType.Input then
-                                    if arg == 'G9' then
-                                        OutputLogMessage('Yep its G9')
-                                        SetBacklightColor(arg, 100, 0, 0)
-                                        SendKeys('Haha!')
-                                    end
-                                    if arg == 'G8' then
-                                        spam = not spam
-                                        OutputLogMessage('Spam mode is: {0}', spam)
-                                        if spam then
-                                            SetBacklightColor(arg, 0, 100, 0)
-                                        else
-                                            SetBacklightColor(arg, 0, 0, 0)
-                                        end
-                                    end
-                                end
-                            end
-                        ";
-
-                    const string desiredProcess = "Notepad";
-
-                    using (LuaEngine engine = new LuaEngine(ledProvider, desiredProcess, script)) {
-                        ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
-
-                        
-                        logitechInputProvider.OnInput += (_, e) => {
-                            var arg = e as InputEventArg;
-                            if (Win32.GetForegroundProcessName().Equals(desiredProcess, StringComparison.CurrentCultureIgnoreCase))
-                                eventQueue.Enqueue(arg);
-                        };
-
-                        InterceptKeys.OnInput += (_, e) => {
-                            var arg = e as InputEventArg;
-                            if (Win32.GetForegroundProcessName().Equals(desiredProcess, StringComparison.CurrentCultureIgnoreCase))
-                                eventQueue.Enqueue(arg);
-                        };
+                    isLuaThreadRunning = true;
 
 
-                        while (isRunning) {
-                            Thread.Sleep(1);
-                            if (Win32.GetForegroundProcessName().Equals(desiredProcess, StringComparison.CurrentCultureIgnoreCase)) {
-                                while (eventQueue.TryDequeue(out var arg)) {
-                                    engine.OnEvent(LuaEventType.Input, arg.Key, arg.Modifiers);
-                                }
+                    ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
 
-                                engine.OnEvent(LuaEventType.Tick, null, null);
+
+                    logitechInputProvider.OnInput += (_, arg) => {
+                        if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName()))
+                            eventQueue.Enqueue(arg);
+                    };
+
+                    InterceptKeys.OnInput += (_, arg) => {
+                        if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName()))
+                            eventQueue.Enqueue(arg);
+                    };
+
+
+                    while (isRunning) {
+                        Thread.Sleep(1);
+                        var processName = Win32.GetForegroundProcessName();
+                        if (settingsService.IsProcessRelevant(processName)) {
+                            while (eventQueue.TryDequeue(out var arg)) {
+                                settingsService.OnEvent(processName, LuaEventType.Input, arg.Key, arg.Modifiers);
                             }
 
+                            settingsService.OnEvent(processName, LuaEventType.Tick, null, null);
                         }
                     }
+
+                    isLuaThreadRunning = false;
                 }).Start();
 
                 Application.Run();
 
                 isRunning = false;
-                logitechInputProvider.Dispose();
-            } finally {
-                nativeKeyboardHook.Dispose();
-                ledProvider.Dispose();
+            }
+            finally {
+                while (isLuaThreadRunning) {
+                    /* Waiting for lua thread to terminate before cleaning up dependencies */
+                }
+
+                foreach (var item in disposables) {
+                    item.Dispose();
+                }
             }
 
             Logger.Info("LogiLed terminated");
@@ -123,6 +111,10 @@ namespace Logitech {
     %USERPROFILE%\AppData\Local\Logitech\Logitech Gaming Software\profiles
     Can iterate these, and if the target EXE name matches the one in a LUA/json config, add it automagically.
     
+
+    Documentation?
+    - Gain/Lost focus events to LUA
+    - Init method? No point?
      *
      */
 

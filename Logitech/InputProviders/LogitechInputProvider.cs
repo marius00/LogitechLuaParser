@@ -17,7 +17,7 @@ namespace Logitech.InputProviders {
         private volatile bool _isRunning = true;
         private readonly Dictionary<string, bool> _state = new Dictionary<string, bool>(MaxGKeys);
 
-        public event EventHandler OnInput;
+        public event InputEventHandler OnInput;
 
 
         public void Start() {

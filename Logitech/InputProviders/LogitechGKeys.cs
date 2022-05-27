@@ -2,18 +2,21 @@
 using System.Runtime.InteropServices;
 
 namespace Logitech.InputProviders {
+    /// <summary>
+    /// Keyboard hook for local Logitech key events
+    /// Logitech keys only (G-keys etc)
+    /// </summary>
     class LogitechGKeys {
         /*
-     LogiGkeyGetKeyboardGkeyString
-LogiGkeyGetMouseButtonString
-LogiGkeyInit
-LogiGkeyInitWithoutCallback
-LogiGkeyInitWithoutContext
-LogiGkeyIsKeyboardGkeyPressed
-LogiGkeyIsMouseButtonPressed
-LogiGkeyShutdown
-
-     */
+            LogiGkeyGetKeyboardGkeyString
+            LogiGkeyGetMouseButtonString
+            LogiGkeyInit
+            LogiGkeyInitWithoutCallback
+            LogiGkeyInitWithoutContext
+            LogiGkeyIsKeyboardGkeyPressed
+            LogiGkeyIsMouseButtonPressed
+            LogiGkeyShutdown
+        */
 
 
         [DllImport("LogitechGkeyEnginesWrapper.dll", CharSet = CharSet.Auto, SetLastError = true)]

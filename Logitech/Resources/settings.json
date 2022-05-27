@@ -1,0 +1,6 @@
+[
+	{
+		"path": "example.lua",
+		"process": "nameofprocess"
+	}
+]

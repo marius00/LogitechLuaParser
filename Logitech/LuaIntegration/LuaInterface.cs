@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Linq;
+using log4net;
 
 namespace Logitech.LuaIntegration {
     public class LuaInterface {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(LuaInterface));
         public static void OutputLogMessage(string message, params object[] args) {
             try {
-                Console.WriteLine(message, args);
+                Logger.Debug(string.Format(message, args));
             } catch (FormatException ex) {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(message + "[" + string.Join(", ", args.Select(arg => arg.ToString())) + "]");
+                Logger.Warn(ex.Message);
+                Logger.Warn(message + "[" + string.Join(", ", args.Select(arg => arg.ToString())) + "]");
 
             }
         }
 
         public static void OutputLogMessage(string message) {
-            Console.WriteLine(message);
+            Logger.Debug(message);
         }
 
         public void PressKey(string key) {

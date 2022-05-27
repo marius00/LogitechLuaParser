@@ -7,6 +7,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using InputSimulatorStandard;
+using InputSimulatorStandard.Native;
 using log4net;
 using Logitech.Led;
 using NLua;
@@ -28,21 +30,26 @@ namespace Logitech.LuaIntegration {
                                end
                     ";
 
-        private readonly Lua _lua;
+        private Lua _lua;
         private LuaFunction _onEvent;
         private readonly LogitechLedProvider _ledProvider;
         private readonly string _target;
+        private readonly InputSimulator _simulator = new InputSimulator();
 
         public LuaEngine(LogitechLedProvider ledProvider, string target, string script) {
+            _ledProvider = ledProvider;
+            _target = target;
+
+            ResetState();
+            SetScript(script);
+        }
+
+        private void ResetState() {
+            _lua?.Dispose();
             _lua = new Lua();
             _lua.State.Encoding = Encoding.UTF8;
             _lua.LoadCLRPackage();
             _lua["provider"] = this;
-
-            _ledProvider = ledProvider;
-            _target = target;
-
-            SetScript(script);
         }
 
         public void SetColor(string key, int r, int g, int b) {
@@ -50,28 +57,50 @@ namespace Logitech.LuaIntegration {
                 _ledProvider.SetColor(key, r, g, b);
         }
 
+        // TODO: Ideally I'd like to wrap these somehow.. so they're public to LAU but not to C#..
         public void SendInput(string keys) {
             if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
-                
+
                 Process p = Process.GetProcessesByName(_target).FirstOrDefault();
                 if (p != null) {
                     IntPtr h = p.MainWindowHandle;
                     Win32.SetForegroundWindow(h);
                     SendKeys.SendWait(keys);
                 }
-
             }
         }
 
-        private void SetScript(string script) {
+        // https://github.com/GregsStack/InputSimulatorStandard
+        public void KeyDown(string key) {
+            if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
+                _simulator.Keyboard.KeyDown(VirtualKeyCode.SHIFT); // TODO: Key mapping
+                // _simulator.Mouse.LeftButtonClick()
+            }
+        }
+
+        public void KeyUp(string key) {
+            if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
+                _simulator.Keyboard.KeyUp(VirtualKeyCode.SHIFT); // TODO: Key mapping
+            }
+        }
+
+        public void KeyPress(string key) {
+            if (Win32.GetForegroundProcessName().Equals(_target, StringComparison.CurrentCultureIgnoreCase)) {
+                _simulator.Keyboard.KeyPress(VirtualKeyCode.SHIFT); // TODO: Key mapping
+            }
+        }
+
+        public bool SetScript(string script) {
             try {
                 _lua.DoString(Hardcoded + script);
                 _onEvent = _lua["OnEvent"] as LuaFunction;
+                return true;
             } catch (NLua.Exceptions.LuaScriptException ex) {
                 Logger.Error("Error parsing script");
                 Logger.Error(ex.Message, ex);
             }
 
+            return false;
         }
 
         public void OnEvent(LuaEventType eventType, string arg, string[] modifiers) {

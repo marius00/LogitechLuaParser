@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logitech.LuaIntegration {
-    internal enum LuaEventType {
-        Tick, Input, Focus
-    }
+namespace Logitech.InputProviders.Args {
+    public delegate void InputEventHandler(object sender, InputEventArg e);
 }

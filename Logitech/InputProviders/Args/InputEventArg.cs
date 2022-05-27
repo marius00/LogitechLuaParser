@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Logitech.InputProviders.Args {
-    internal class InputEventArg : EventArgs {
+    public class InputEventArg : EventArgs {
         public string Key { get; set; }
         public string[] Modifiers { get; set; } = Array.Empty<string>();
     }
