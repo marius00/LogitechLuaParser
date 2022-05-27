@@ -77,6 +77,7 @@ namespace Logitech.Settings {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void _fileMonitor_OnModified(object sender, System.IO.FileSystemEventArgs e) {
+            // TODO: File is most likely write protected at this point, queue an action to process in ~1s instead
             if (e.Name == GlobalSettings.SettingsFileName) {
                 ParseSettingsJson(e.FullPath);
             }

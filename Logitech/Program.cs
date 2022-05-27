@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using log4net;
 using Logitech.Config;
@@ -14,7 +11,6 @@ using Logitech.InputProviders.Args;
 using Logitech.Led;
 using Logitech.LuaIntegration;
 using Logitech.Settings;
-using NLua;
 
 namespace Logitech {
     internal class Program {
@@ -25,6 +21,8 @@ namespace Logitech {
 
         static void Main(string[] args) {
             Logger.Info("Starting LogiLed..");
+            CopyInitialFiles();
+
             List<IDisposable> disposables = new List<IDisposable>();
 
             InterceptKeys nativeKeyboardHook = new InterceptKeys();
@@ -48,19 +46,15 @@ namespace Logitech {
                 new Thread(() => {
                     isLuaThreadRunning = true;
 
-
                     ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
 
-
-                    logitechInputProvider.OnInput += (_, arg) => {
+                    void HandleInputEvent(object _, InputEventArg arg) {
                         if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName()))
                             eventQueue.Enqueue(arg);
-                    };
+                    }
 
-                    InterceptKeys.OnInput += (_, arg) => {
-                        if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName()))
-                            eventQueue.Enqueue(arg);
-                    };
+                    logitechInputProvider.OnInput += HandleInputEvent;
+                    InterceptKeys.OnInput += HandleInputEvent;
 
 
                     while (isRunning) {
@@ -94,46 +88,62 @@ namespace Logitech {
 
             Logger.Info("LogiLed terminated");
         }
+
+        /// <summary>
+        /// Copy the example files to appdata if no settings exists yet
+        /// </summary>
+        private static void CopyInitialFiles() {
+            if (!File.Exists(GlobalSettings.SettingsFile)) {
+                Logger.Info($"First run detected, copying example files to {GlobalSettings.SettingsFolder}");
+
+                string appResFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources");
+                foreach (string filename in Directory.GetFiles(appResFolder, "*.*", SearchOption.TopDirectoryOnly)) {
+                    File.Copy(filename, filename.Replace(appResFolder, GlobalSettings.SettingsFolder), false);
+                }
+            }
+        }
+        /*
+        }
+
+         Send keys to another application:
+         https://stackoverflow.com/questions/15292175/how-to-send-a-key-to-another-application#15292428
+
+        Give focus to another application:
+
+        Detect application lost focus:
+            [to stop sending keys, stop all scripts]
+
+        Application has focus?
+            [to only trigger G-keys inside application]
+
+        Profiles:
+        %USERPROFILE%\AppData\Local\Logitech\Logitech Gaming Software\profiles
+        Can iterate these, and if the target EXE name matches the one in a LUA/json config, add it automagically.
+
+
+        Documentation?
+        - Gain/Lost focus events to LUA
+        - Init method? No point?
+         *
+         */
+
+
+        /*
+         Desired functionality:
+         * Cancel script on alt+tab / tab out of game
+         * Reset/restart script (LUA)
+         * Detect G-keys
+         * Detect regular keys
+         * Detect modifiers (Alt, Shift, Ctrl)
+         * Able to set colors on G910
+         * Able to HOLD keys
+         * Able to SPAM keys
+         * G-Macro support?
+         *
+         * v2:
+         * Able to hold LMB/RMB
+         * Able to spam LMB/RMB
+         *
+         */
     }
-    /*
-     Send keys to another application:
-     https://stackoverflow.com/questions/15292175/how-to-send-a-key-to-another-application#15292428
-
-    Give focus to another application:
-
-    Detect application lost focus:
-        [to stop sending keys, stop all scripts]
-
-    Application has focus?
-        [to only trigger G-keys inside application]
-
-    Profiles:
-    %USERPROFILE%\AppData\Local\Logitech\Logitech Gaming Software\profiles
-    Can iterate these, and if the target EXE name matches the one in a LUA/json config, add it automagically.
-    
-
-    Documentation?
-    - Gain/Lost focus events to LUA
-    - Init method? No point?
-     *
-     */
-
-
-    /*
-     Desired functionality:
-     * Cancel script on alt+tab / tab out of game
-     * Reset/restart script (LUA)
-     * Detect G-keys
-     * Detect regular keys
-     * Detect modifiers (Alt, Shift, Ctrl)
-     * Able to set colors on G910
-     * Able to HOLD keys
-     * Able to SPAM keys
-     * G-Macro support?
-     *
-     * v2:
-     * Able to hold LMB/RMB
-     * Able to spam LMB/RMB
-     *
-     */
 }

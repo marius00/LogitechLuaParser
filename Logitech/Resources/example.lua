@@ -4,10 +4,11 @@ OutputLogMessage('Starting script with W and S being Green')
 
 active = false
 function OnEvent(event, arg, modifiers)
-	if event == LuaEventType.Tick then
+	if event == TickEvent then
 		
-	end
-	if event == LuaEventType.Input then
+	elseif event == FocusEvent then
+		
+	elseif event == InputEvent then
 		if arg == 'G8' then
 			active = not active
 			if active then

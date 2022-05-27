@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using InputSimulatorStandard;
 using InputSimulatorStandard.Native;
@@ -20,14 +16,20 @@ namespace Logitech.LuaIntegration {
     internal class LuaEngine : IDisposable {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LuaEngine));
         const string Hardcoded = @"
-                               import ('Logitech', 'Logitech.LuaIntegration')
-                               OutputLogMessage = LuaInterface.OutputLogMessage
-                               function SetBacklightColor(k, r, g, b)
-                                    provider:SetColor(k, r, g, b)
-                               end
-                               function SendKeys(keys)
-                                    provider:SendInput(keys)
-                               end
+import ('Logitech', 'Logitech.LuaIntegration')
+OutputLogMessage = LuaInterface.OutputLogMessage
+
+function SetBacklightColor(k, r, g, b)
+provider:SetColor(k, r, g, b)
+end
+
+function SendKeys(keys)
+provider:SendInput(keys)
+end
+
+TickEvent = LuaEventType.Tick
+InputEvent = LuaEventType.Input
+FocusEvent = LuaEventType.Focus
                     ";
 
         private Lua _lua;

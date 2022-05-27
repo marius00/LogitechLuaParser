@@ -18,13 +18,5 @@ namespace Logitech.LuaIntegration {
         public static void OutputLogMessage(string message) {
             Logger.Debug(message);
         }
-
-        public void PressKey(string key) {
-            // TODO:
-        }
-
-        public void SetBacklightColor() {
-            // TODO:
-        }
     }
 }

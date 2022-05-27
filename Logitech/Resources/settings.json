@@ -1,6 +1,6 @@
 [
 	{
 		"path": "example.lua",
-		"process": "nameofprocess"
+		"process": "notepad"
 	}
 ]
