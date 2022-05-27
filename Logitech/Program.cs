@@ -18,10 +18,10 @@ namespace Logitech {
         private static volatile bool isLuaThreadRunning = false;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
-
         static void Main(string[] args) {
             Logger.Info("Starting LogiLed..");
             CopyInitialFiles();
+
 
             // KeyMapper.Validate();
             // return;

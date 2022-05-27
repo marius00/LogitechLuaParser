@@ -13,6 +13,9 @@ OutputLogMessage('Starting script with W and S being Green')
 -- MouseDown('RMB')
 -- MouseUp('RMB')
 
+-- OutputLogMessage('{0}', time()) -- Time in milliseconds
+-- Sleep(2000)
+-- OutputLogMessage('{0}', time())
 
 active = false
 function OnEvent(event, arg, modifiers)

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using InputSimulatorStandard;
 using InputSimulatorStandard.Native;
@@ -60,11 +61,20 @@ function MouseDoubleClick(key)
     provider:MouseDoubleClick(key)
 end
 
+function Sleep(ms)
+    provider:Sleep(ms)
+end
+
+function time()
+    return provider:Time()
+end
+
 
 
 TickEvent = LuaEventType.Tick
 InputEvent = LuaEventType.Input
 FocusEvent = LuaEventType.Focus
+
 
                     ";
 
@@ -188,6 +198,14 @@ FocusEvent = LuaEventType.Focus
             else {
                 Logger.Warn($"Invalid key \"{key}\"");
             }
+        }
+
+        public void Sleep(int milliseconds) {
+            Thread.Sleep(milliseconds);
+        }
+
+        public long Time() {
+            return (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
         }
 
         public bool SetScript(string script) {
