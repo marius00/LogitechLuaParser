@@ -170,7 +170,7 @@ namespace Logitech {
          * Cancel script on alt+tab / tab out of game (- Gain/Lost focus events to LUA)
          *
          * Ability to run with "no application" ?
-         * Auto add a profile for running the tool
+         * Auto add a profile for running the tool (Can auto detect when .exe files are missing from the .xml and add them..)
          *
          */
     }
