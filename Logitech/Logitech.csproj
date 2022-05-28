@@ -66,9 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\GlobalSettings.cs" />
+    <Compile Include="Config\AppPaths.cs" />
+    <Compile Include="Config\LogitechPaths.cs" />
     <Compile Include="InputProviders\Args\InputEventArg.cs" />
     <Compile Include="InputProviders\Args\InputEventHandler.cs" />
+    <Compile Include="InputProviders\Args\InputModifierState.cs" />
+    <Compile Include="InputProviders\Args\InputModifierStateHelper.cs" />
     <Compile Include="InputProviders\LogitechInputProvider.cs" />
     <Compile Include="InputProviders\LogitechGKeys.cs" />
     <Compile Include="InputProviders\InterceptKeys.cs" />
@@ -76,6 +79,7 @@
     <Compile Include="Led\LogitechGSDK.cs" />
     <Compile Include="Led\LogitechKeyMapping.cs" />
     <Compile Include="Led\LogitechLedProvider.cs" />
+    <Compile Include="LGS\ProfileUtil.cs" />
     <Compile Include="LuaIntegration\LuaEngine.cs" />
     <Compile Include="LuaIntegration\LuaEventType.cs" />
     <Compile Include="LuaIntegration\LuaInterface.cs" />

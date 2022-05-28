@@ -9,7 +9,7 @@ namespace Logitech.Config {
     /// <summary>
     /// Hardcoded paths to settings/logging/etc
     /// </summary>
-    internal static class GlobalSettings {
+    internal static class AppPaths {
         public static string LocalAppdata {
             get {
                 string appdata = System.Environment.GetEnvironmentVariable("LocalAppData");

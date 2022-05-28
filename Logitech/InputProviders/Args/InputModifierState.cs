@@ -5,8 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Logitech.InputProviders.Args {
-    public class InputEventArg : EventArgs {
-        public string Key { get; set; }
-        public ushort Modifiers { get; set; } = 0;
+    internal enum InputModifierState {
+        Shift = 2,
+        Ctrl = 4,
+        Alt = 8,
+        M1 = 16,
+        M2 = 32,
+        M3 = 64,
     }
 }

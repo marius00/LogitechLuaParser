@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using InputSimulatorStandard.Native;
 using Logitech.InputProviders.Args;
 
 namespace Logitech.InputProviders {
@@ -38,16 +40,31 @@ namespace Logitech.InputProviders {
 
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern short GetAsyncKeyState(ushort virtualKeyCode);
+
         private static IntPtr HookCallback(
             int nCode, IntPtr wParam, IntPtr lParam) {
-            if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN) {
+            if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN)) {
                 int vkCode = Marshal.ReadInt32(lParam);
-                // Console.WriteLine((Keys)vkCode);
+
+                ushort state = 0;
+                if ((GetAsyncKeyState((ushort)VirtualKeyCode.LSHIFT) & 0x8000) != 0) {
+                    state += (ushort)InputModifierState.Shift;
+                }
+                if ((GetAsyncKeyState((ushort)VirtualKeyCode.LCONTROL) & 0x8000) != 0) {
+                    state += (ushort)InputModifierState.Ctrl;
+                }
+                if (wParam == (IntPtr)WM_SYSKEYDOWN) {
+                    state += (ushort)InputModifierState.Alt;
+                }
+
                 OnInput?.Invoke(null, new InputEventArg {
-                    Key = ((Keys)vkCode).ToString() // TODO: Support for CTRL, Shift, Alt
+                    Key = ((Keys)vkCode).ToString(),
+                    Modifiers = state
                 });
-            }
-            else {
+            } else {
                 // Control.ModifierKeys
                 // int vkCode = Marshal.ReadInt32(lParam);
                 // Console.WriteLine("???" + (Keys)vkCode);

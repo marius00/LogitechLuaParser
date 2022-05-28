@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using InputSimulatorStandard;
-using InputSimulatorStandard.Native;
 using log4net;
 using Logitech.Led;
 using NLua;
@@ -20,6 +17,7 @@ namespace Logitech.LuaIntegration {
 
         const string Hardcoded = @"
 import ('Logitech', 'Logitech.LuaIntegration')
+import ('Logitech.InputProviders.Args')
 OutputLogMessage = LuaInterface.OutputLogMessage
 
 function SetBacklightColor(k, r, g, b)
@@ -70,6 +68,29 @@ function time()
     return provider:Time()
 end
 
+function IsShift(modifier)
+    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.Shift)) > 0
+end
+
+function IsCtrl(modifier)
+    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.Ctrl)) > 0
+end
+
+function IsAlt(modifier)
+    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.Alt)) > 0
+end
+
+function IsM1(modifier)
+    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.M1)) > 0
+end
+
+function IsM2(modifier)
+    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.M2)) > 0
+end
+
+function IsM3(modifier)
+    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.M3)) > 0
+end
 
 
 TickEvent = LuaEventType.Tick
@@ -87,7 +108,7 @@ FocusEvent = LuaEventType.Focus
 
         public LuaEngine(LogitechLedProvider ledProvider, string script) {
             _ledProvider = ledProvider;
-
+            
             ResetState();
             SetScript(script);
         }
@@ -225,7 +246,7 @@ FocusEvent = LuaEventType.Focus
         }
 
 
-        public void OnEvent(LuaEventType eventType, string arg, string[] modifiers) {
+        public void OnEvent(LuaEventType eventType, string arg, ushort modifiers) {
             try {
                 _onEvent?.Call(eventType, arg, modifiers);
             }

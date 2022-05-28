@@ -19,12 +19,23 @@ OutputLogMessage('Starting script with W and S being Green')
 -- Sleep(2000)
 -- OutputLogMessage('{0}', time())
 
+-- Check if Ctrl, Alt or Shift are pressed during an InputEvent
+-- IsShift(modifiers)
+-- IsCtrl(modifiers)
+-- IsAlt(modifiers)
+-- IsM1(modifiers)
+-- IsM2(modifiers)
+-- IsM3(modifiers)
+
 active = false
 function OnEvent(event, arg, modifiers)
 	if event == TickEvent then
 		-- Tick event, can be used to repeatedly spam keys
 	elseif event == FocusEvent then
 		-- The game has either gained or lost focus
+		if arg == 'false' and active then
+			active = false -- Auto disable G8 when alt-tabbing out of the game.
+		end
 	elseif event == InputEvent then
 		-- A key has been pressed
 		if arg == 'G8' then

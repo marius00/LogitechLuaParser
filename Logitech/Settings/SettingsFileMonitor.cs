@@ -18,7 +18,7 @@ namespace Logitech.Settings {
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public bool Start() {
             _watcher = new FileSystemWatcher();
-            _watcher.Path = GlobalSettings.SettingsFolder;
+            _watcher.Path = AppPaths.SettingsFolder;
             _watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
             _watcher.Filter = "*.*";
             _watcher.IncludeSubdirectories = false;

@@ -28,7 +28,7 @@ namespace Logitech.Settings {
             _fileMonitor.Start();
             _fileMonitor.OnModified += _fileMonitor_OnModified;
 
-            ParseSettingsJson(GlobalSettings.SettingsFile);
+            ParseSettingsJson(AppPaths.SettingsFile);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Logitech.Settings {
             foreach (var entry in settings) {
                 if (!_luaScriptFromProcess.ContainsKey(entry.Process)) {
                     try {
-                        string script = File.ReadAllText(Path.Combine(GlobalSettings.SettingsFolder, entry.Path));
+                        string script = File.ReadAllText(Path.Combine(AppPaths.SettingsFolder, entry.Path));
 
                         // May have multiple references to a single script
                         if (!_luaScriptFromFilename.ContainsKey(entry.Path.ToLower())) {
@@ -79,7 +79,7 @@ namespace Logitech.Settings {
         /// <param name="e"></param>
         private void _fileMonitor_OnModified(object sender, System.IO.FileSystemEventArgs e) {
             // TODO: File is most likely write protected at this point, queue an action to process in ~1s instead
-            if (e.Name == GlobalSettings.SettingsFileName) {
+            if (e.Name == AppPaths.SettingsFileName) {
                 ParseSettingsJson(e.FullPath);
             }
             else if (e.Name.EndsWith(".lua", StringComparison.CurrentCultureIgnoreCase)) {
@@ -109,7 +109,7 @@ namespace Logitech.Settings {
             return _luaScriptFromProcess.Keys.Any(key => key.Equals(processName, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        public void OnEvent(string processName, LuaEventType eventType, string arg, string[] modifiers) {
+        public void OnEvent(string processName, LuaEventType eventType, string arg, ushort modifiers) {
             if (!_luaScriptFromProcess.ContainsKey(processName)) {
                 Logger.Error($"Attempting to dispatch event to {processName}, which does not exist.");
                 return;

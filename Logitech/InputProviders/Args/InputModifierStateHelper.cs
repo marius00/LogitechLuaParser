@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Logitech.InputProviders.Args {
-    public class InputEventArg : EventArgs {
-        public string Key { get; set; }
-        public ushort Modifiers { get; set; } = 0;
+    static class InputModifierStateHelper {
+        public static ulong GetValue(this InputModifierState s1) {
+            return (ulong)s1;
+        }
     }
 }
