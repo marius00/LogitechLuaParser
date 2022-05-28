@@ -26,7 +26,6 @@ namespace Logitech {
             CopyInitialFiles();
 
 
-
             List<IDisposable> disposables = new List<IDisposable>();
 
             InterceptKeys nativeKeyboardHook = new InterceptKeys();

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using log4net.Core;
@@ -86,6 +88,13 @@ namespace Logitech.Settings {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void _fileMonitor_OnModified(object sender, System.IO.FileSystemEventArgs e) {
+            Thread.Sleep(1500); // Very cheap hack
+            /*
+            var timer = new System.Windows.Forms.Timer();
+            timer.Tick += TickFunction;
+            timer.Interval = 1000;
+            timer.Start();*/
+
             // TODO: File is most likely write protected at this point, queue an action to process in ~1s instead
             if (e.Name == AppPaths.SettingsFileName) {
                 ParseSettingsJson(e.FullPath);

@@ -118,6 +118,7 @@
     <Compile Include="UI\MainContainer.Designer.cs">
       <DependentUpon>MainContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\MinimizeToTrayHandler.cs" />
     <Compile Include="Win32.cs" />
   </ItemGroup>
   <ItemGroup>
