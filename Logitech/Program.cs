@@ -71,17 +71,34 @@ namespace Logitech {
                     logitechInputProvider.OnInput += HandleInputEvent;
                     InterceptKeys.OnInput += HandleInputEvent;
 
-
+                    var lastProcessRelevant = false;
+                    var lastProcess = "";
                     while (isRunning) {
                         Thread.Sleep(1);
                         var processName = Win32.GetForegroundProcessName();
                         if (settingsService.IsProcessRelevant(processName)) {
+                            if (!lastProcessRelevant) {
+                                // Notify current process that it just gained focus
+                                settingsService.OnEvent(processName, LuaEventType.Focus, "true", null);
+
+                            }
+
                             while (eventQueue.TryDequeue(out var arg)) {
                                 settingsService.OnEvent(processName, LuaEventType.Input, arg.Key, arg.Modifiers);
                             }
 
                             settingsService.OnEvent(processName, LuaEventType.Tick, null, null);
+                            lastProcessRelevant = true;
                         }
+                        else {
+                            if (lastProcessRelevant) {
+                                // Notify the last relevant process that it lost focus
+                                settingsService.OnEvent(lastProcess, LuaEventType.Focus, "false", null);
+                            }
+                            lastProcessRelevant = false;
+                        }
+
+                        lastProcess = processName;
                     }
 
                     isLuaThreadRunning = false;
@@ -154,17 +171,6 @@ namespace Logitech {
                 Logger.Warn("Error installing logitech profile");
                 Logger.Warn(ex.Message, ex);
             }
-
-            {
-                Process p = Process.GetProcessesByName("LCore").FirstOrDefault();
-                if (p != null) {
-                    var exe = p.MainModule.FileName;
-                    p.Kill();
-                    Process.Start(exe, "/minimized");
-                }
-            }
-
-
         }
         /*
         
