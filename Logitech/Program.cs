@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using System.Threading;
-using InputSimulatorStandard;
 using log4net;
 using Logitech.Config;
 using Logitech.InputProviders;
@@ -16,19 +12,20 @@ using Logitech.Led;
 using Logitech.LGS;
 using Logitech.LuaIntegration;
 using Logitech.Settings;
+using Logitech.UI;
 
 namespace Logitech {
     internal class Program {
-        private static volatile bool isRunning = true;
-        private static volatile bool isLuaThreadRunning = false;
+        private static volatile bool _isRunning = true;
+        private static volatile bool _isLuaThreadRunning = false;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
+        [STAThread]
         static void Main(string[] args) {
             Logger.Info("Starting LogiLed..");
             CopyInitialFiles();
 
-            int x = 8 + 4 + 2;
-            int y = x & 16;
+
 
             List<IDisposable> disposables = new List<IDisposable>();
 
@@ -51,7 +48,7 @@ namespace Logitech {
 
 
                 new Thread(() => {
-                    isLuaThreadRunning = true;
+                    _isLuaThreadRunning = true;
 
                     ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
 
@@ -69,7 +66,7 @@ namespace Logitech {
 
                     var lastProcessRelevant = false;
                     var lastProcess = "";
-                    while (isRunning) {
+                    while (_isRunning) {
                         Thread.Sleep(1);
                         var processName = Win32.GetForegroundProcessName();
                         if (settingsService.IsProcessRelevant(processName)) {
@@ -97,15 +94,19 @@ namespace Logitech {
                         lastProcess = processName;
                     }
 
-                    isLuaThreadRunning = false;
+                    _isLuaThreadRunning = false;
                 }).Start();
 
-                Application.Run();
 
-                isRunning = false;
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainContainer());
+
+                _isRunning = false;
             }
             finally {
-                while (isLuaThreadRunning) {
+                while (_isLuaThreadRunning) {
                     /* Waiting for lua thread to terminate before cleaning up dependencies */
                 }
 
@@ -137,24 +138,13 @@ namespace Logitech {
         }
         /*
         
-
-        Profiles:
-        %USERPROFILE%\AppData\Local\Logitech\Logitech Gaming Software\profiles
-        Can iterate these, and if the target EXE name matches the one in a LUA/json config, add it automagically.
-
-
-        Documentation?
-        
         /*
          Desired functionality:
          * G-Macro support?
          * Mouseclick events (?)
-         * Auto install globally
          * Anon stats
-         * UI?
-         *
-         * Ability to run with "no application" ?
-         * Auto add a profile for running the tool (Can auto detect when .exe files are missing from the .xml and add them..)
+
+         * Delay "on change" events for .lua files.
          *
          */
     }

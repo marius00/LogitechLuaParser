@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace Logitech.Config {
+    /// <summary>
+    /// Paths for Logitech Gaming Software profile
+    /// </summary>
     internal static class LogitechPaths {
         public const string ProfileFilename = "{F752A6C0-5D8A-4EB1-A25A-3CC275A060C1}.xml";
         public const string DefaultProfileFilename = "{09D92D75-3C8C-4723-B06C-4090BCB899C0}.xml"; // The global config

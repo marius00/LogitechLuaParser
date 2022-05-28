@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using InputSimulatorStandard.Native;
 using log4net;
 using Logitech.InputProviders.Args;
-using Logitech.LuaIntegration;
 
 namespace Logitech.InputProviders {
+    /// <summary>
+    /// Input provider for G-keys
+    /// </summary>
     internal class LogitechInputProvider : IDisposable {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LogitechInputProvider));
         private const int MaxGKeys = 29; // G1 G2 G...

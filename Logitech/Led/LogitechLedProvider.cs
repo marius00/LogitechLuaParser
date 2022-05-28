@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using log4net;
 
 namespace Logitech.Led {
+    /// <summary>
+    /// Color integration for Logitech keyboards.
+    /// Allows setting colors per-key on keyboards with support for this.
+    /// </summary>
     internal class LogitechLedProvider : IDisposable {
-        // TODO: Gotta ensure that the logitech LED, the keyboard events and the SendKey all uses the same mapping.
-        // See https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.sendkeys?view=windowsdesktop-6.0 for sendkeys
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LogitechLedProvider));
 
         private bool _isInitialized;

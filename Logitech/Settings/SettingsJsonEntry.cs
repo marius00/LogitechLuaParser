@@ -12,5 +12,7 @@ namespace Logitech.Settings {
     public class SettingsJsonEntry {
         public string Path { get; set; }
         public string Process { get; set; }
+        public string Description { get; set; }
+        public string Id { get; set; }
     }
 }

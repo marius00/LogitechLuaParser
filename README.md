@@ -37,7 +37,7 @@ The .lua file must have a function called `OnEvent`. See [example.lua](./Logitec
 
 
 ### Example scripts:
-* Satisfactory (autorun and spam E) ([satisfactory.lua](./docs/satisfactory.lua))
+* Satisfactory (autorun and spam E) ([satisfactory.lua](./Docs/satisfactory.lua))
 * Example script ([example.lua](./Logitech/Resources/example.lua))
 
 ### Missing/TODO:

@@ -40,8 +40,14 @@ namespace Logitech.Settings {
 
             // Add any new entries
             foreach (var entry in settings) {
+                if (string.IsNullOrEmpty(entry.Path) || !File.Exists(entry.Path)) {
+                    Logger.Warn($"Could not load script \"{entry.Path}\", file does not exist.");
+                    continue;
+                }
+
                 if (!_luaScriptFromProcess.ContainsKey(entry.Process)) {
                     try {
+                        
                         string script = File.ReadAllText(Path.Combine(AppPaths.SettingsFolder, entry.Path));
 
                         // May have multiple references to a single script
@@ -52,8 +58,10 @@ namespace Logitech.Settings {
                         _luaScriptFromProcess[entry.Process] = _luaScriptFromFilename[entry.Path.ToLower()];
                         _luaScriptFromProcess[entry.Process].AddTarget(entry.Process);
                         Logger.Debug($"Configured \"{entry.Path}\" for \"{entry.Process}\"");
-                    }
-                    catch (IOException ex) {
+                    } catch (IOException ex) {
+                        Logger.Warn(ex.Message, ex);
+                        Logger.Warn($"Unable to read lua file {entry.Path}, script for {entry.Process} not loaded.");
+                    } catch (UnauthorizedAccessException ex) {
                         Logger.Warn(ex.Message, ex);
                         Logger.Warn($"Unable to read lua file {entry.Path}, script for {entry.Process} not loaded.");
                     }

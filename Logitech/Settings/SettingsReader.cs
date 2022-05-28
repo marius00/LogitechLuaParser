@@ -7,7 +7,7 @@ namespace Logitech.Settings {
     /// <summary>
     /// Reads settings.json and parses the result
     /// </summary>
-    internal class SettingsReader {
+    internal static class SettingsReader {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SettingsReader));
 
         private static readonly JsonSerializerSettings Settings = new JsonSerializerSettings {
@@ -18,6 +18,14 @@ namespace Logitech.Settings {
             DateFormatHandling = DateFormatHandling.MicrosoftDateFormat,
         };
 
+        public static void Persist(string filename, SettingsJsonEntry[] data) {
+            string json = JsonConvert.SerializeObject(data, Formatting.Indented, Settings);
+            try {
+                File.WriteAllText(filename, json);
+            } catch (Exception ex) {
+                    Logger.Warn(ex.Message, ex);
+            }
+        }
 
         public static SettingsJsonEntry[] Load(string filename) {
             if (File.Exists(filename)) {
