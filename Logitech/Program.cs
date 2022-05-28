@@ -133,15 +133,10 @@ namespace Logitech {
                 }
             }
 
-            ProfileUtil.Initialize();
+            ProfileUtil.Install();
         }
         /*
         
-        Detect application lost focus:
-            [to stop sending keys, stop all scripts]
-
-        Application has focus?
-            [to only trigger G-keys inside application]
 
         Profiles:
         %USERPROFILE%\AppData\Local\Logitech\Logitech Gaming Software\profiles
@@ -155,6 +150,7 @@ namespace Logitech {
          * G-Macro support?
          * Mouseclick events (?)
          * Auto install globally
+         * Anon stats
          * UI?
          *
          * Ability to run with "no application" ?

@@ -25,7 +25,8 @@ namespace Logitech.LGS {
                 var exe = p.MainModule.FileName;
                 p.Kill();
                 Process.Start(exe, "/minimized");
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 Logger.Warn("Error restarting Logitech Gaming Software. A manual restart is required");
                 Logger.Warn(ex.Message, ex);
             }
@@ -44,9 +45,34 @@ namespace Logitech.LGS {
 
                     RestartLgs();
                 }
-
-            } catch (IOException ex) {
+            }
+            catch (IOException ex) {
                 Logger.Warn("Error installing logitech profile");
+                Logger.Warn(ex.Message, ex);
+            }
+        }
+
+        public static void Install() {
+            if (!File.Exists(LogitechPaths.DefaultProfile)) {
+                Logger.Warn("Could not find Logitech Gaming Software default profile installed..");
+                return;
+            }
+
+            try {
+                var assemblyPath = Assembly.GetEntryAssembly().Location.Replace("\\\\", "\\").ToUpperInvariant();
+                var text = File.ReadAllText(LogitechPaths.DefaultProfile);
+                if (!text.Contains(assemblyPath)) {
+                    Logger.Info("Installing LogiLed into the Logitech Gaming Software default profile");
+                    text = text.Replace("</description>", "</description>\n    " + $"<target path=\"{assemblyPath}\"/>");
+
+                    // Backup existing config and write in the software location
+                    File.Copy(LogitechPaths.DefaultProfile, Path.Combine(AppPaths.CoreFolder, LogitechPaths.DefaultProfileFilename));
+                    File.WriteAllText(LogitechPaths.DefaultProfile, text);
+                    RestartLgs();
+                }
+            }
+            catch (IOException ex) {
+                Logger.Warn("Error installing into logitech default profile");
                 Logger.Warn(ex.Message, ex);
             }
         }

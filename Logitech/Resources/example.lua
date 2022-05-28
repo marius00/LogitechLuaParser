@@ -3,18 +3,22 @@ SetBacklightColor('W', 0, 100, 0)
 SetBacklightColor('S', 0, 100, 0)
 OutputLogMessage('Starting script with W and S being Green')
 
+-- Click or hold keys
 -- KeyDown('Shift')
 -- KeyPress('A')
 -- KeyUp('Shift')
 
+-- Click the mouse
 -- Mouse keys: LMB, RMB, MMB
 -- MouseClick('LMB')
 -- MouseDoubleClick('LMB')
 -- MouseDown('RMB')
 -- MouseUp('RMB')
 
+-- Move the mouse cursor
 -- MouseMove(15, 0)
 
+-- Sleep/wait
 -- OutputLogMessage('{0}', time()) -- Time in milliseconds
 -- Sleep(2000)
 -- OutputLogMessage('{0}', time())

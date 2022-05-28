@@ -38,7 +38,7 @@ namespace Logitech.Config {
             }
         }
 
-        private static string CoreFolder {
+        public static string CoreFolder {
             get {
                 string path = Path.Combine(LocalAppdata, "EvilSoft", "LogiLed");
                 Directory.CreateDirectory(path);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Logitech.Config {
     internal static class LogitechPaths {
         public const string ProfileFilename = "{F752A6C0-5D8A-4EB1-A25A-3CC275A060C1}.xml";
-        private const string DefaultProfileFilename = "{09D92D75-3C8C-4723-B06C-4090BCB899C0}.xml"; // The global config
+        public const string DefaultProfileFilename = "{09D92D75-3C8C-4723-B06C-4090BCB899C0}.xml"; // The global config
 
         private static string ProfileFolder {
             get {
@@ -20,5 +20,6 @@ namespace Logitech.Config {
         }
 
         public static string Profile => Path.Combine(ProfileFolder, ProfileFilename);
+        public static string DefaultProfile => Path.Combine(ProfileFolder, DefaultProfileFilename);
     }
 }
