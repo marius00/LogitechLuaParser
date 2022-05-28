@@ -13,9 +13,21 @@ The Logitech Gaming Software already supports this, but with a few critical shor
 The purpose of this tool is to correct some of these shortcomings. (and possibly introduce new issues ;))  
 
 ## Getting started
-#### LGS Profile  
-In order to receive events from G-buttons, your active profile needs to support the .exe file of this project.  
-By default, on startup the program will make a new profile and restart LGS. But it can just as easily be used with existing profiles, simply by adding the exe under "properties" on the profile.
+#### Configuring Logitech Gaming Software
+
+In order to best use the G-keys with this application, they should be configured to be G-keys inside the Logitech Gaming Software:
+
+![](Docs/overlay.png)  
+
+**Hover over the G-key:**  
+![](Docs/hover.png)
+
+**Select "Assign new command"**  
+![](Docs/assign-new-command.png)
+
+**Assign it to "G-Key" (you may need to scroll down)**   
+![](Docs/gkey.png)
+
 
 #### Lua configuration  
 `%appdata%\..\local\evilsoft\logiled\configuration\settings.json` contains a mapping of processes and lua files.  
@@ -24,13 +36,14 @@ Ex: `{ "path": "satisfactory.lua", "process": "FactoryGame-Win64-Shipping" }` sa
 The .lua file must have a function called `OnEvent`. See [example.lua](./Logitech/Resources/example.lua) for details on usage.
 
 
+### Example scripts:
+* Satisfactory (autorun and spam E) ([satisfactory.lua](./docs/satisfactory.lua))
+* Example script ([example.lua](./Logitech/Resources/example.lua))
+
 ### Missing/TODO:
 * Send focus events to Lua, to detect when the game loses/regains focus
-* Example script(s) ([example.lua](./Logitech/Resources/example.lua))
-* Ability to run it for "any" application, not just hardcoded processes
-* Auto add process .exe to Logitech Gaming Software when detected as missing
+
 * Macro support? (Undecided, is it even possible?)
-* Detect key modifiers (Shift, Alt, Ctrl)
 * Reset the LUA script on command (currently crashes if called)
 * Anonymous usage stats (webstats)
 * Probably several bugs still not discovered.
