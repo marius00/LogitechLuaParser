@@ -50,6 +50,7 @@ namespace Logitech {
                     _isLuaThreadRunning = true;
 
                     ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
+                    ConcurrentQueue<InputEventArg> keyUpEventQueue = new ConcurrentQueue<InputEventArg>();
 
                     void HandleInputEvent(object _, InputEventArg arg) {
                         if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName())) {
@@ -62,6 +63,9 @@ namespace Logitech {
 
                     logitechInputProvider.OnInput += HandleInputEvent;
                     InterceptKeys.OnInput += HandleInputEvent;
+                    InterceptKeys.OnKeyUp += (object _, InputEventArg arg) => {
+                        keyUpEventQueue.Enqueue(arg);
+                    };
 
                     var lastProcessRelevant = false;
                     var lastProcess = "";
@@ -75,8 +79,12 @@ namespace Logitech {
 
                             }
 
+                            while (keyUpEventQueue.TryDequeue(out var arg)) {
+                                settingsService.OnEvent(processName, LuaEventType.KeyUp, arg.Key, arg.Modifiers);
+                            }
+
                             while (eventQueue.TryDequeue(out var arg)) {
-                                settingsService.OnEvent(processName, LuaEventType.Input, arg.Key, arg.Modifiers);
+                                settingsService.OnEvent(processName, LuaEventType.KeyDown, arg.Key, arg.Modifiers);
                             }
 
                             settingsService.OnEvent(processName, LuaEventType.Tick, null, 0);
@@ -144,6 +152,8 @@ namespace Logitech {
          * Anon stats
 
          * Delay "on change" events for .lua files.
+         *
+         * KeyUp events, test if this can be used to detect clicking W with autorun on
          *
          */
     }

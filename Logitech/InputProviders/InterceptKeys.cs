@@ -15,12 +15,14 @@ namespace Logitech.InputProviders {
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
         private const int WM_SYSKEYDOWN = 0x0104; // Alt https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-syskeydown
+        private const int WM_KEYUP = 0x0101;
 
         private static LowLevelKeyboardProc _proc = HookCallback;
         private static IntPtr _hookId = IntPtr.Zero;
 
 
         public static event InputEventHandler OnInput;
+        public static event InputEventHandler OnKeyUp;
 
         public void Start() {
             _hookId = SetHook(_proc);
@@ -63,6 +65,12 @@ namespace Logitech.InputProviders {
                 OnInput?.Invoke(null, new InputEventArg {
                     Key = ((Keys)vkCode).ToString(),
                     Modifiers = state
+                });
+            }
+            else if (nCode >= 0 && wParam == (IntPtr)WM_KEYUP) {
+                int vkCode = Marshal.ReadInt32(lParam);
+                OnKeyUp?.Invoke(null, new InputEventArg {
+                    Key = ((Keys)vkCode).ToString(),
                 });
             } else {
                 // Control.ModifierKeys

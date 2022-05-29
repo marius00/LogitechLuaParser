@@ -533,10 +533,18 @@ namespace Logitech {
         }
 
         public static bool IsValidLogitechMapping(string character) {
+            if (string.IsNullOrEmpty(character)) {
+                return false;
+            }
+
             return _keyMapping.ContainsKey(character.ToUpper());
         }
 
         public static bool IsValidKeyCode(string character) {
+            if (string.IsNullOrEmpty(character)) {
+                return false;
+            }
+
             return _virtualKeyCodes.ContainsKey(character.ToUpper());
         }
 

@@ -94,7 +94,8 @@ end
 
 
 TickEvent = LuaEventType.Tick
-InputEvent = LuaEventType.Input
+KeyDownEvent = LuaEventType.KeyDown
+KeyUpEvent = LuaEventType.KeyUp
 FocusEvent = LuaEventType.Focus
 
 

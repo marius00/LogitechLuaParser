@@ -26,7 +26,7 @@ end
 function toggleAutorun()
 	autorun = not autorun
 	if autorun then
-		SetBacklightColor(arg, 100, 0, 0)
+		SetBacklightColor('G3', 100, 0, 0)
 		KeyDown('W')
 	else
 		stopAutorun()
@@ -37,9 +37,9 @@ function toggleSpamKey(keyToSpam)
 	spamKey = not spamKey
 	key = keyToSpam
 	if spamKey then
-		SetBacklightColor(arg, 0, 100, 0)
+		SetBacklightColor('G3', 0, 100, 0)
 	else
-		SetBacklightColor(arg, 0, 0, 0)
+		SetBacklightColor('G3', 0, 0, 0)
 	end
 end
 
@@ -48,7 +48,7 @@ function OnEvent(event, arg, modifiers)
 		if spamKey then
 			KeyPress(key)
 		end
-	elseif event == InputEvent then
+	elseif event == KeyDownEvent then
 		if arg == 'G4' then
 			toggleSpamKey('e')
 		elseif arg == 'G3' then
@@ -60,6 +60,11 @@ function OnEvent(event, arg, modifiers)
 		end
 	else
 		OutputLogMessage('Unknown event type: {0}', event)		
+	end
+	
+	if event == KeyUpEvent and autorun and arg == 'W' then
+		OutputLogMessage('Cancelling autorun due to W')
+		stopAutorun()
 	end
 end
 

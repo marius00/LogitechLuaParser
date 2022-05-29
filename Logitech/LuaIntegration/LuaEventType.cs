@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Logitech.LuaIntegration {
     internal enum LuaEventType {
-        Tick, Input, Focus
+        Tick, KeyDown, Focus, KeyUp
     }
 }

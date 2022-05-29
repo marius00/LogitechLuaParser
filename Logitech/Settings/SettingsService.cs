@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using log4net;
-using log4net.Core;
 using Logitech.Config;
 using Logitech.Led;
 using Logitech.LuaIntegration;
@@ -42,7 +37,8 @@ namespace Logitech.Settings {
 
             // Add any new entries
             foreach (var entry in settings) {
-                if (string.IsNullOrEmpty(entry.Path) || !File.Exists(entry.Path)) {
+                
+                if (string.IsNullOrEmpty(entry.Path) || !File.Exists(Path.Combine(AppPaths.SettingsFolder, entry.Path))) {
                     Logger.Warn($"Could not load script \"{entry.Path}\", file does not exist.");
                     continue;
                 }
@@ -89,6 +85,9 @@ namespace Logitech.Settings {
         /// <param name="e"></param>
         private void _fileMonitor_OnModified(object sender, System.IO.FileSystemEventArgs e) {
             Thread.Sleep(1500); // Very cheap hack
+
+
+            // Timer will create threading issues, just use a mutex.. performance is irrelevant for this.
             /*
             var timer = new System.Windows.Forms.Timer();
             timer.Tick += TickFunction;

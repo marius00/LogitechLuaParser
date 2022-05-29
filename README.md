@@ -30,9 +30,7 @@ In order to best use the G-keys with this application, they should be configured
 
 
 #### Lua configuration  
-`%appdata%\..\local\evilsoft\logiled\configuration\settings.json` contains a mapping of processes and lua files.  
-Ex: `{ "path": "satisfactory.lua", "process": "FactoryGame-Win64-Shipping" }` says that it will run `satisfactory.lua` if the `FactoryGame-Win64-Shipping` process is running. (FactoryGame-Win64-Shipping.exe)
-#### .Lua file
+
 The .lua file must have a function called `OnEvent`. See [example.lua](./Logitech/Resources/example.lua) for details on usage.
 
 
@@ -41,8 +39,6 @@ The .lua file must have a function called `OnEvent`. See [example.lua](./Logitec
 * Example script ([example.lua](./Logitech/Resources/example.lua))
 
 ### Missing/TODO:
-* Send focus events to Lua, to detect when the game loses/regains focus
-
 * Macro support? (Undecided, is it even possible?)
 * Reset the LUA script on command (currently crashes if called)
 * Anonymous usage stats (webstats)
