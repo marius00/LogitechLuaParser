@@ -28,6 +28,9 @@ In order to best use the G-keys with this application, they should be configured
 **Assign it to "G-Key" (you may need to scroll down)**   
 ![](Docs/gkey.png)
 
+**When you start this program for the first time, it will start minimized to tray.**  
+The program is running, look for it down in the bottom right corner.
+
 
 #### Lua configuration  
 

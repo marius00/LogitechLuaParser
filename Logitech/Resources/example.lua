@@ -35,13 +35,16 @@ active = false
 function OnEvent(event, arg, modifiers)
 	if event == TickEvent then
 		-- Tick event, can be used to repeatedly spam keys
+		-- Arg is null
 	elseif event == FocusEvent then
 		-- The game has either gained or lost focus
+		-- Arg will be 'true' or 'false'
 		if arg == 'false' and active then
 			active = false -- Auto disable G8 when alt-tabbing out of the game.
 		end
 	elseif event == KeyDownEvent then
 		-- A key has been pressed
+		-- Arg will contain the relevant key, modifiers will contain information about Shift, Alt, Ctrl, M1..
 		if arg == 'G8' then
 			active = not active
 			if active then
@@ -56,5 +59,8 @@ function OnEvent(event, arg, modifiers)
 			-- If LMB for example is pressed during this, it will only cancel once a regular mouseclick has been made.
 			-- For colors, it's recommended to start the script by setting the desired "default colors"
 		end
+	elseif event == KeyUpEvent then
+		-- Useful for things like cancelling autorun, a key has just been released.
+		-- Arg will contain the relevant key, modifiers will not be included
 	end
 end

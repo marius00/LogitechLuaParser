@@ -154,6 +154,8 @@ namespace Logitech {
          * Delay "on change" events for .lua files.
          *
          * KeyUp events, test if this can be used to detect clicking W with autorun on
+         * Expand settings to keep "isminimized" and "isfirstrun"?
+         * Toast informing of where it minimized?
          *
          */
     }
