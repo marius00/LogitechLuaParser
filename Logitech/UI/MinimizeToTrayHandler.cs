@@ -14,15 +14,16 @@ namespace Logitech.UI {
         private Form _form;
         private readonly NotifyIcon _notifyIcon;
 
-        public MinimizeToTrayHandler(Form form, NotifyIcon notifyIcon) {
+        public MinimizeToTrayHandler(Form form, NotifyIcon notifyIcon, bool startMinimized, bool minimizeToTray) {
             _form = form;
             _notifyIcon = notifyIcon;
             _form.SizeChanged += OnMinimizeWindow;
             _notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
             _previousWindowState = _form.WindowState;
+            MinimizeToTray = minimizeToTray;
 
             _notifyIcon.Visible = false;
-            if (true) {
+            if (startMinimized) {
                 form.WindowState = FormWindowState.Minimized;
 
                 if (MinimizeToTray) {
@@ -31,7 +32,7 @@ namespace Logitech.UI {
             }
         }
 
-        public bool MinimizeToTray => true;
+        public bool MinimizeToTray { get; private set; }
 
         public void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e) {
             _form.Visible = true;

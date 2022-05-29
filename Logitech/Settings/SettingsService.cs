@@ -36,7 +36,7 @@ namespace Logitech.Settings {
             var settings = SettingsReader.Load(filename);
 
             // Add any new entries
-            foreach (var entry in settings) {
+            foreach (var entry in settings.Entries) {
                 
                 if (string.IsNullOrEmpty(entry.Path) || !File.Exists(Path.Combine(AppPaths.SettingsFolder, entry.Path))) {
                     Logger.Warn($"Could not load script \"{entry.Path}\", file does not exist.");
@@ -69,7 +69,7 @@ namespace Logitech.Settings {
             // Remove any entries that has been removed from settings.json
             var processes = _luaScriptFromProcess.Keys.ToArray(); // Immuteable list
             foreach (var process in processes) {
-                if (!settings.Any(m => m.Process == process)) {
+                if (!settings.Entries.Any(m => m.Process == process)) {
                     _luaScriptFromProcess.Remove(process);
                     Logger.Debug($"Removed lua script for {process}");
                     // TODO: Remove it from _luaScriptFromFilename (Make sure it's not referenced by another process first)

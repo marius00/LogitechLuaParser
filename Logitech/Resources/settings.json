@@ -1,8 +1,13 @@
-[
-	{
-		"id": "98C739DC-78B8-4863-90CB-458859FF2EDD",
-		"description": "Example script for notepad",
-		"path": "example.lua",
-		"process": "notepad"
-	}
-]
+{
+  "entries": [
+    {
+      "id": "98C739DC-78B8-4863-90CB-458859FF2EDD",
+      "description": "Example script for notepad",
+      "path": "example.lua",
+      "process": "notepad"
+    }
+  ],
+  "minimizeToTray": true,
+  "startMinimized": false,
+  "firstRun": true
+}

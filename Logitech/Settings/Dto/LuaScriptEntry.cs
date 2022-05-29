@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logitech.Settings {
+﻿namespace Logitech.Settings.Dto {
     /// <summary>
     /// JSON Schema definition for "settings.json"
-    /// Settings.json is a SettingsJsonEntry[]
+    /// Settings.json is a LuaScriptEntry[]
     /// </summary>
-    public class SettingsJsonEntry {
+    public class LuaScriptEntry {
         public string Path { get; set; }
         public string Process { get; set; }
         public string Description { get; set; }

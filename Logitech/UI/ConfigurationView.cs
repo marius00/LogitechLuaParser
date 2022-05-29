@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Logitech.Config;
 using Logitech.Settings;
+using Logitech.Settings.Dto;
 
 namespace Logitech.UI {
     public partial class ConfigurationView : Form {
@@ -41,7 +42,7 @@ namespace Logitech.UI {
             listView1.BeginUpdate();
             listView1.Items.Clear();
             var sr = SettingsReader.Load(AppPaths.SettingsFile);
-            foreach (var entry in sr) {
+            foreach (var entry in sr.Entries) {
                 ListViewItem lvi = new ListViewItem(entry.Description ?? entry.Process);
                 lvi.SubItems.Add(entry.Process);
                 lvi.SubItems.Add(entry.Path);
@@ -55,13 +56,15 @@ namespace Logitech.UI {
         private void btnAdd_Click(object sender, EventArgs e) {
             var dialog = new AddModifyEntry();
             if (dialog.ShowDialog() == DialogResult.OK) {
-                var entries = SettingsReader.Load(AppPaths.SettingsFile).ToList();
-                if (entries.Any(m => m.Process == dialog.Process)) {
+                var settings = SettingsReader.Load(AppPaths.SettingsFile);
+
+                
+                if (settings.Entries.Any(m => m.Process == dialog.Process)) {
                     MessageBox.Show("A script already exists for this process", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                entries.Add(new SettingsJsonEntry {
+                settings.Entries.Add(new LuaScriptEntry {
                     Process = dialog.Process,
                     Description = dialog.Description,
                     Path = dialog.Script,
@@ -70,7 +73,7 @@ namespace Logitech.UI {
 
 
 
-                SettingsReader.Persist(AppPaths.SettingsFile, entries.ToArray());
+                SettingsReader.Persist(AppPaths.SettingsFile, settings);
                 UpdateListView();
             }
         }
@@ -85,22 +88,24 @@ namespace Logitech.UI {
                 };
 
                 if (dialog.ShowDialog() == DialogResult.OK) {
+                    var settings = SettingsReader.Load(AppPaths.SettingsFile);
                     var tag = lvi.Tag.ToString();
 
-                    var entries = SettingsReader.Load(AppPaths.SettingsFile).Where(m => m.Id != tag).ToList();
-                    if (entries.Any(m => m.Process == dialog.Process)) {
+                    var entries = settings.Entries.Where(m => m.Id != tag).ToList();
+                    if (settings.Entries.Any(m => m.Process == dialog.Process)) {
                         MessageBox.Show("A script already exists for this process", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
-                    entries.Add(new SettingsJsonEntry {
+                    entries.Add(new LuaScriptEntry {
                         Process = dialog.Process,
                         Description = dialog.Description,
                         Path = dialog.Script,
                         Id = tag
                     });
-                    
-                    SettingsReader.Persist(AppPaths.SettingsFile, entries.ToArray());
+
+                    settings.Entries = entries;
+                    SettingsReader.Persist(AppPaths.SettingsFile, settings);
 
                     UpdateListView();
                 }
@@ -115,8 +120,9 @@ namespace Logitech.UI {
                 ListViewItem lvi = (ListViewItem)entry;
                 var tag = lvi.Tag.ToString();
 
-                var entries = SettingsReader.Load(AppPaths.SettingsFile).Where(m => m.Id != tag).ToArray();
-                SettingsReader.Persist(AppPaths.SettingsFile, entries);
+                var settings = SettingsReader.Load(AppPaths.SettingsFile);
+                settings.Entries = settings.Entries.Where(m => m.Id != tag).ToList();
+                SettingsReader.Persist(AppPaths.SettingsFile, settings);
                 UpdateListView();
                 return;
             }

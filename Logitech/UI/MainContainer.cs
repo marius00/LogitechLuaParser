@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Logitech.Config;
+using Logitech.Settings;
 
 namespace Logitech.UI {
     public partial class MainContainer : Form {
@@ -14,7 +16,8 @@ namespace Logitech.UI {
         public MainContainer() {
             InitializeComponent();
 
-            _minimizeToTrayHandler = new MinimizeToTrayHandler(this, notifyIcon1);
+            var settings = SettingsReader.Load(AppPaths.SettingsFile);
+            _minimizeToTrayHandler = new MinimizeToTrayHandler(this, notifyIcon1, settings.StartMinimized, settings.MinimizeToTray);
         }
 
         private void MainContainer_Load(object sender, EventArgs e) {
