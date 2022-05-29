@@ -32,6 +32,9 @@ namespace Logitech.Led {
             else if (b < 0 || b > 100) {
                 Logger.Warn($"Argument blue \"{b}\" is outside range [0, 100]");
             }
+            else if (string.IsNullOrEmpty(key)) {
+                Logger.Warn("Attempting to set color for key, but argument is NULL");
+            }
             else if (!KeyMapper.IsValidLogitechMapping(key)) {
                 Logger.Warn("Invalid key \"{key}\"");
             } else if (!_isInitialized) {
