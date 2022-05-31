@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Logitech.InputProviders.Args {
     public class InputEventArg : EventArgs {
-        public string Key { get; set; }
-        public ushort Modifiers { get; set; } = 0;
+        public InputEventArg(string key, ushort modifiers, InputEventType type) {
+            Key = key;
+            Modifiers = modifiers;
+            Type = type;
+        }
+        public string Key { get; private set; }
+        public ushort Modifiers { get; private set; }
+        public InputEventType Type { get; private set; }
     }
 }

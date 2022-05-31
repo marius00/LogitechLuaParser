@@ -25,12 +25,12 @@
         private void InitializeComponent() {
             this.btnDelete = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnModify = new System.Windows.Forms.Button();
             this.btnViewFolder = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.linkViewLog = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
@@ -38,7 +38,7 @@
             // btnDelete
             // 
             this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDelete.Location = new System.Drawing.Point(174, 205);
+            this.btnDelete.Location = new System.Drawing.Point(174, 221);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 3;
@@ -61,10 +61,15 @@
             this.listView1.Location = new System.Drawing.Point(12, 12);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(907, 187);
+            this.listView1.Size = new System.Drawing.Size(834, 203);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Description";
+            this.columnHeader3.Width = 250;
             // 
             // columnHeader1
             // 
@@ -79,7 +84,7 @@
             // btnModify
             // 
             this.btnModify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnModify.Location = new System.Drawing.Point(93, 205);
+            this.btnModify.Location = new System.Drawing.Point(93, 221);
             this.btnModify.Name = "btnModify";
             this.btnModify.Size = new System.Drawing.Size(75, 23);
             this.btnModify.TabIndex = 2;
@@ -90,7 +95,7 @@
             // btnViewFolder
             // 
             this.btnViewFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnViewFolder.Location = new System.Drawing.Point(255, 205);
+            this.btnViewFolder.Location = new System.Drawing.Point(255, 221);
             this.btnViewFolder.Name = "btnViewFolder";
             this.btnViewFolder.Size = new System.Drawing.Size(198, 23);
             this.btnViewFolder.TabIndex = 4;
@@ -101,7 +106,7 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Location = new System.Drawing.Point(12, 205);
+            this.btnAdd.Location = new System.Drawing.Point(12, 221);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 1;
@@ -109,23 +114,17 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "Description";
-            this.columnHeader3.Width = 250;
-            // 
             // textBox1
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(12, 234);
+            this.textBox1.Location = new System.Drawing.Point(12, 250);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(907, 243);
+            this.textBox1.Size = new System.Drawing.Size(834, 243);
             this.textBox1.TabIndex = 5;
             this.textBox1.WordWrap = false;
             // 
@@ -133,7 +132,7 @@
             // 
             this.linkViewLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.linkViewLog.AutoSize = true;
-            this.linkViewLog.Location = new System.Drawing.Point(865, 483);
+            this.linkViewLog.Location = new System.Drawing.Point(792, 499);
             this.linkViewLog.Name = "linkViewLog";
             this.linkViewLog.Size = new System.Drawing.Size(63, 13);
             this.linkViewLog.TabIndex = 6;
@@ -145,7 +144,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(931, 503);
+            this.ClientSize = new System.Drawing.Size(858, 519);
             this.Controls.Add(this.linkViewLog);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnAdd);

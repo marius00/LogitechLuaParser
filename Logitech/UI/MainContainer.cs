@@ -18,14 +18,18 @@ namespace Logitech.UI {
 
             var settings = SettingsReader.Load(AppPaths.SettingsFile);
             _minimizeToTrayHandler = new MinimizeToTrayHandler(this, notifyIcon1, settings.StartMinimized, settings.MinimizeToTray);
+
+            if (settings.FirstRun) {
+                settings.StartMinimized = true;
+                settings.MinimizeToTray = true;
+                settings.FirstRun = false;
+                SettingsReader.Persist(AppPaths.SettingsFile, settings);
+            }
         }
 
         private void MainContainer_Load(object sender, EventArgs e) {
             ConfigurationView f = new ConfigurationView();
             f.TopLevel = false;
-            /*p.Controls.Add(f);
-            p.Width = p.Parent.Width;
-            p.Height = p.Parent.Height;*/
             Controls.Add(f);
             f.Show();
         }

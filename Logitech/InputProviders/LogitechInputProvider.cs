@@ -61,10 +61,7 @@ namespace Logitech.InputProviders {
                                         modifiers += (ushort)InputModifierState.Ctrl;
                                     }
 
-                                    OnInput?.Invoke(this, new InputEventArg {
-                                        Key = $"G{key}",
-                                        Modifiers = modifiers
-                                    });
+                                    OnInput?.Invoke(this, new InputEventArg($"G{key}", modifiers, InputEventType.Down));
                                 }
 
                                 _state[uniqueKey] = true;

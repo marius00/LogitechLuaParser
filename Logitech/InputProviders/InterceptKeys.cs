@@ -20,9 +20,7 @@ namespace Logitech.InputProviders {
         private static LowLevelKeyboardProc _proc = HookCallback;
         private static IntPtr _hookId = IntPtr.Zero;
 
-
         public static event InputEventHandler OnInput;
-        public static event InputEventHandler OnKeyUp;
 
         public void Start() {
             _hookId = SetHook(_proc);
@@ -62,16 +60,11 @@ namespace Logitech.InputProviders {
                     state += (ushort)InputModifierState.Alt;
                 }
 
-                OnInput?.Invoke(null, new InputEventArg {
-                    Key = ((Keys)vkCode).ToString(),
-                    Modifiers = state
-                });
+                OnInput?.Invoke(null, new InputEventArg(((Keys)vkCode).ToString(), state, InputEventType.Down));
             }
             else if (nCode >= 0 && wParam == (IntPtr)WM_KEYUP) {
                 int vkCode = Marshal.ReadInt32(lParam);
-                OnKeyUp?.Invoke(null, new InputEventArg {
-                    Key = ((Keys)vkCode).ToString(),
-                });
+                OnInput?.Invoke(null, new InputEventArg(((Keys)vkCode).ToString(), 0, InputEventType.Up));
             } else {
                 // Control.ModifierKeys
                 // int vkCode = Marshal.ReadInt32(lParam);

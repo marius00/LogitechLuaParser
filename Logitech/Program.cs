@@ -40,17 +40,20 @@ namespace Logitech {
             LogitechInputProvider logitechInputProvider = new LogitechInputProvider();
             disposables.Add(logitechInputProvider);
 
+            MouseInputProvider mouseInputProvider = new MouseInputProvider();
+            disposables.Add(mouseInputProvider);
+
             try {
                 nativeKeyboardHook.Start();
                 ledProvider.Start();
                 logitechInputProvider.Start();
+                mouseInputProvider.Start();
 
 
                 new Thread(() => {
                     _isLuaThreadRunning = true;
 
                     ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
-                    ConcurrentQueue<InputEventArg> keyUpEventQueue = new ConcurrentQueue<InputEventArg>();
 
                     void HandleInputEvent(object _, InputEventArg arg) {
                         if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName())) {
@@ -63,9 +66,8 @@ namespace Logitech {
 
                     logitechInputProvider.OnInput += HandleInputEvent;
                     InterceptKeys.OnInput += HandleInputEvent;
-                    InterceptKeys.OnKeyUp += (object _, InputEventArg arg) => {
-                        keyUpEventQueue.Enqueue(arg);
-                    };
+                    mouseInputProvider.OnInput += HandleInputEvent;
+
 
                     var lastProcessRelevant = false;
                     var lastProcess = "";
@@ -79,12 +81,9 @@ namespace Logitech {
 
                             }
 
-                            while (keyUpEventQueue.TryDequeue(out var arg)) {
-                                settingsService.OnEvent(processName, LuaEventType.KeyUp, arg.Key, arg.Modifiers);
-                            }
-
                             while (eventQueue.TryDequeue(out var arg)) {
-                                settingsService.OnEvent(processName, LuaEventType.KeyDown, arg.Key, arg.Modifiers);
+                                var type = arg.Type == InputEventType.Down ? LuaEventType.KeyDown : LuaEventType.KeyUp;
+                                settingsService.OnEvent(processName, type, arg.Key, arg.Modifiers);
                             }
 
                             settingsService.OnEvent(processName, LuaEventType.Tick, null, 0);

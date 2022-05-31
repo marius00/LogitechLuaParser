@@ -46,7 +46,7 @@
             this.listView1.Location = new System.Drawing.Point(12, 12);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(800, 239);
+            this.listView1.Size = new System.Drawing.Size(802, 245);
             this.listView1.TabIndex = 1;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -65,16 +65,16 @@
             // 
             this.tbProcess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbProcess.Location = new System.Drawing.Point(66, 257);
+            this.tbProcess.Location = new System.Drawing.Point(66, 263);
             this.tbProcess.Name = "tbProcess";
-            this.tbProcess.Size = new System.Drawing.Size(746, 20);
+            this.tbProcess.Size = new System.Drawing.Size(748, 20);
             this.tbProcess.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 260);
+            this.label1.Location = new System.Drawing.Point(12, 266);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(48, 13);
             this.label1.TabIndex = 3;
@@ -84,7 +84,7 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnOk.Location = new System.Drawing.Point(12, 283);
+            this.btnOk.Location = new System.Drawing.Point(12, 289);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(117, 42);
             this.btnOk.TabIndex = 5;
@@ -98,7 +98,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnOk;
-            this.ClientSize = new System.Drawing.Size(824, 337);
+            this.ClientSize = new System.Drawing.Size(826, 343);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbProcess);
