@@ -1,32 +1,40 @@
 SetBacklightColor('W', 0, 100, 0)
 SetBacklightColor('S', 0, 100, 0)
-SetBacklightColor('G3', 0, 0, 0)
-SetBacklightColor('G4', 0, 0, 0)
+SetBacklightColor('G1', 0, 0, 100)
+SetBacklightColor('G3', 100, 0, 0)
+SetBacklightColor('G4', 100, 0, 0)
+SetBacklightColor('G5', 100, 0, 0)
 
--- Simple script to spam "e" on G4 (loot plants in Satisfactory)
--- And autorun on G3. Autorun will cancel by clicking "S" or G3 again.
--- G1 cancels both scripts
+-- G5 holds down the left mouse button (manual crafting)
+-- G4 spams "e" (loot plants)
+-- G3 enables autorun (W, S or G3 to cancel it)
+-- G1 cancels all scripts
+-- Active keys are green, inactive are red.
 
 spamKey = false
 key = 'e' -- Loot plants
 autorun = false
+holdingLmb = false
 
 function reset()
 	spamKey = false
-	SetBacklightColor('G4', 0, 0, 0)
+	SetBacklightColor('G4', 100, 0, 0)
 	stopAutorun()
+	if holdingLmb then
+		toggleHoldLmb()
+	end
 end
 
 function stopAutorun()
 	autorun = false
-	SetBacklightColor('G3', 0, 0, 0)
+	SetBacklightColor('G3', 100, 0, 0)
 	KeyUp('W')
 end
 
 function toggleAutorun()
 	autorun = not autorun
 	if autorun then
-		SetBacklightColor('G3', 100, 0, 0)
+		SetBacklightColor('G3', 0, 100, 0)
 		KeyDown('W')
 	else
 		stopAutorun()
@@ -39,7 +47,18 @@ function toggleSpamKey(keyToSpam)
 	if spamKey then
 		SetBacklightColor('G3', 0, 100, 0)
 	else
-		SetBacklightColor('G3', 0, 0, 0)
+		SetBacklightColor('G3', 100, 0, 0)
+	end
+end
+
+function toggleHoldLmb()
+	holdingLmb = not holdingLmb
+	if holdingLmb then
+		SetBacklightColor('G3', 0, 100, 0)
+		MouseDown('LMB')
+	else
+		SetBacklightColor('G3', 100, 0, 0)
+		MouseUp('LMB')
 	end
 end
 
@@ -49,7 +68,9 @@ function OnEvent(event, arg, modifiers)
 			KeyPress(key)
 		end
 	elseif event == KeyDownEvent then
-		if arg == 'G4' then
+		if arg == 'G5' then
+			toggleHoldLmb()
+		elseif arg == 'G4' then
 			toggleSpamKey('e')
 		elseif arg == 'G3' then
 			toggleAutorun()
@@ -62,6 +83,7 @@ function OnEvent(event, arg, modifiers)
 		OutputLogMessage('Unknown event type: {0}', event)		
 	end
 	
+	-- Key "UP" event, because W is being held down and we'll constantly receive it.
 	if event == KeyUpEvent and autorun and arg == 'W' then
 		OutputLogMessage('Cancelling autorun due to W')
 		stopAutorun()

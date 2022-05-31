@@ -62,5 +62,6 @@ function OnEvent(event, arg, modifiers)
 	elseif event == KeyUpEvent then
 		-- Useful for things like cancelling autorun, a key has just been released.
 		-- Arg will contain the relevant key, modifiers will not be included
+		-- G-keys will not send KeyUpEvents
 	end
 end
