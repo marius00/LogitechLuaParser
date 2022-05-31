@@ -46,7 +46,8 @@ The .lua file must have a function called `OnEvent`. See [example.lua](./Logitec
 * Reset the LUA script on command (currently crashes if called)
 * Anonymous usage stats (webstats)
 * Probably several bugs still not discovered.
+* A fallback profile (if a profile is in use, but does not map this key) + a default profile (if no other profile is in use)
 
 ### Unsupported:
-* Logitech G Hub will never be supported.  
+* Logitech G Hub - Support may be considered for the future.
 * The project is for Windows only.  
