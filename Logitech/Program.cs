@@ -2,8 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
+using System.Web;
 using log4net;
 using Logitech.Config;
 using Logitech.InputProviders;
@@ -20,11 +22,12 @@ namespace Logitech {
         private static volatile bool _isLuaThreadRunning = false;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
+
+
         [STAThread]
         static void Main(string[] args) {
             Logger.Info("Starting LogiLed..");
             CopyInitialFiles();
-
 
             List<IDisposable> disposables = new List<IDisposable>();
 
@@ -140,7 +143,8 @@ namespace Logitech {
                 }
             }
 
-            ProfileUtil.Install();
+            LgsProfileUtil.Install();
+            GHubProfileUtil.Install();
         }
         /*
         

@@ -19,5 +19,6 @@ namespace Logitech.Config {
 
         public static string Profile => Path.Combine(ProfileFolder, ProfileFilename);
         public static string DefaultProfile => Path.Combine(ProfileFolder, DefaultProfileFilename);
+        public static string GHubConfig => Path.Combine(AppPaths.LocalAppdata, "LGHUB", "settings.db");
     }
 }

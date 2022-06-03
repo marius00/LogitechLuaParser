@@ -12,7 +12,7 @@ The Logitech Gaming Software already supports this, but with a few critical shor
 
 The purpose of this tool is to correct some of these shortcomings. (and possibly introduce new issues ;))  
 
-## Getting started
+## Getting started (Logitech Gaming Software)
 #### Configuring Logitech Gaming Software
 
 In order to best use the G-keys with this application, they should be configured to be G-keys inside the Logitech Gaming Software:
@@ -27,6 +27,17 @@ In order to best use the G-keys with this application, they should be configured
 
 **Assign it to "G-Key" (you may need to scroll down)**   
 ![](Docs/gkey.png)
+
+**When you start this program for the first time, it will start minimized to tray.**  
+The program is running, look for it down in the bottom right corner.
+
+
+## Getting started (Logitech G-Hub)
+#### Configuring G-Hub
+
+The keys will need to be configured in G-Hub, and your LUA script should listen for whichever key is configured in G-Hub.
+
+The integration has been verified to work, but no detailed setup guide for G-Hub is available.
 
 **When you start this program for the first time, it will start minimized to tray.**  
 The program is running, look for it down in the bottom right corner.
@@ -49,5 +60,4 @@ The .lua file must have a function called `OnEvent`. See [example.lua](./Logitec
 * A fallback profile (if a profile is in use, but does not map this key) + a default profile (if no other profile is in use)
 
 ### Unsupported:
-* Logitech G Hub - Support may be considered for the future.
 * The project is for Windows only.  
