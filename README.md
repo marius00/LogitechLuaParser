@@ -3,6 +3,13 @@
 Project Name pending
 
 
+## Table of contents
+* [Purpose of the project](#purpose-of-project)
+* [Lua configuration / example scripts](#lua-configuration)
+* [Supported software](#supported-software)
+* [Configuring for Logitech Gaming Software](#configuring-logitech-gaming-software)
+* [Configuring for Logitech G-Hub](#configuring-g-hub)
+
 ## Purpose of project
 Add LUA programming options to my Logitech G910 keyboard.  
 The Logitech Gaming Software already supports this, but with a few critical shortcomings:
@@ -11,6 +18,13 @@ The Logitech Gaming Software already supports this, but with a few critical shor
 * It does not receive input events from regular keys (cannot cancel autorun on 'W' for example, sending you off a cliff to die)
 
 The purpose of this tool is to correct some of these shortcomings. (and possibly introduce new issues ;))  
+
+
+
+## Supported software:
+* Microsoft Windows
+* [Logitech Gaming Software](#configuring-logitech-gaming-software)
+* [Logitech G-Hub](#configuring-g-hub)
 
 ## Getting started (Logitech Gaming Software)
 #### Configuring Logitech Gaming Software
@@ -35,15 +49,15 @@ The program is running, look for it down in the bottom right corner.
 ## Getting started (Logitech G-Hub)
 #### Configuring G-Hub
 
-The keys will need to be configured in G-Hub, and your LUA script should listen for whichever key is configured in G-Hub.
+The keys will need to be configured in G-Hub, and your LUA script should listen for whichever key is configured in G-Hub.  
 
-The integration has been verified to work, but no detailed setup guide for G-Hub is available.
+The integration has been verified to work, but no detailed setup guide for G-Hub is available.  
 
 **When you start this program for the first time, it will start minimized to tray.**  
 The program is running, look for it down in the bottom right corner.
 
 
-#### Lua configuration  
+## Lua configuration  
 
 The .lua file must have a function called `OnEvent`. See [example.lua](./Logitech/Resources/example.lua) for details on usage.
 
@@ -58,6 +72,4 @@ The .lua file must have a function called `OnEvent`. See [example.lua](./Logitec
 * Anonymous usage stats (webstats)
 * Probably several bugs still not discovered.
 * A fallback profile (if a profile is in use, but does not map this key) + a default profile (if no other profile is in use)
-
-### Unsupported:
-* The project is for Windows only.  
+ 
