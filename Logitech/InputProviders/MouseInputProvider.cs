@@ -10,35 +10,48 @@ namespace Logitech.InputProviders {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MouseInputProvider));
         private volatile bool _isRunning = true;
         public event InputEventHandler OnInput;
+        private volatile int _threadId;
+
+ 
 
         public void Start() {
             new Thread(() => {
+                _threadId = GetCurrentWin32ThreadId();
+
                 var hookProc = new HookProc(HookFunction);
                 IntPtr hook;
                 using (Process curProcess = Process.GetCurrentProcess()) {
                     using (ProcessModule curModule = curProcess.MainModule) {
-                        hook = SetWindowsHookEx(HookType.WH_MOUSE_LL, hookProc, GetModuleHandle(curModule.ModuleName), 0); // (uint)AppDomain.GetCurrentThreadId());
+                        hook = SetWindowsHookEx(HookType.WH_MOUSE_LL, hookProc, GetModuleHandle(curModule.ModuleName), (uint)_threadId);
 
 
                         while (_isRunning) {
-                            var foundMessage = PeekMessage(out MSG msg, IntPtr.Zero, 0, 0, 0x0001);
-                            if (foundMessage) {
+                            if (GetMessage(out MSG msg, IntPtr.Zero, 0, 0) != 0) {
                                 TranslateMessage(ref msg);
                                 DispatchMessage(ref msg);
                             }
                             else {
-                                Thread.Sleep(1);
+                                Logger.Info("Received 0 from GetMessage, terminating mouse hook");
+                                return;
                             }
-
-                            Thread.Sleep(0);
                         }
                     }
                 }
 
                 UnhookWindowsHookEx(hook);
-            }).Start();
+            }) {
+                Priority = ThreadPriority.Highest
+            }.Start();
         }
 
+
+
+        [DllImport("Kernel32", EntryPoint = "GetCurrentThreadId", ExactSpelling = true)]
+        public static extern Int32 GetCurrentWin32ThreadId();
+
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool PostThreadMessage(uint threadId, uint msg, UIntPtr wParam, IntPtr lParam);
 
         [StructLayout(LayoutKind.Sequential)]
         private struct MSG {
@@ -49,7 +62,8 @@ namespace Logitech.InputProviders {
             int time;
             POINT pt;
         }
-
+        [DllImport("user32.dll")]
+        static extern int GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool PeekMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax, uint wRemoveMsg);
@@ -135,7 +149,9 @@ namespace Logitech.InputProviders {
 
 
             WM_XBUTTONDOWN = 0x020B,
-            WM_XBUTTONUP = 0x020C
+            WM_XBUTTONUP = 0x020C,
+
+            WM_QUIT = 0x0012,
         }
 
 
@@ -188,6 +204,9 @@ namespace Logitech.InputProviders {
 
         public void Dispose() {
             _isRunning = false;
+            
+            // Unblock the message thread so we can stop the thread
+            PostThreadMessage((uint)_threadId, (int)MouseMessage.WM_QUIT, UIntPtr.Zero, IntPtr.Zero);
         }
     }
 }
