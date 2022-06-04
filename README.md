@@ -1,6 +1,6 @@
-# Logitech Lua Parser
+# Keyboard Scripting Tool
 
-Project Name pending
+- With support for Logitech G-Keys and Logitech LED
 
 
 ## Table of contents
@@ -25,6 +25,19 @@ The purpose of this tool is to correct some of these shortcomings. (and possibly
 * Microsoft Windows
 * [Logitech Gaming Software](#configuring-logitech-gaming-software)
 * [Logitech G-Hub](#configuring-g-hub)
+
+
+### Example scripts:
+* Satisfactory (autorun and spam E) ([satisfactory.lua](./Docs/satisfactory.lua))
+* Example script ([example.lua](./Logitech/Resources/example.lua))
+
+### Missing/TODO:
+* Macro support? (Undecided, is it even possible?)
+* Reset the LUA script on command (currently crashes if called)
+* Anonymous usage stats (webstats)
+* Probably several bugs still not discovered.
+* A fallback profile (if a profile is in use, but does not map this key) + a default profile (if no other profile is in use)
+ 
 
 ## Getting started (Logitech Gaming Software)
 #### Configuring Logitech Gaming Software
@@ -61,15 +74,3 @@ The program is running, look for it down in the bottom right corner.
 
 The .lua file must have a function called `OnEvent`. See [example.lua](./Logitech/Resources/example.lua) for details on usage.
 
-
-### Example scripts:
-* Satisfactory (autorun and spam E) ([satisfactory.lua](./Docs/satisfactory.lua))
-* Example script ([example.lua](./Logitech/Resources/example.lua))
-
-### Missing/TODO:
-* Macro support? (Undecided, is it even possible?)
-* Reset the LUA script on command (currently crashes if called)
-* Anonymous usage stats (webstats)
-* Probably several bugs still not discovered.
-* A fallback profile (if a profile is in use, but does not map this key) + a default profile (if no other profile is in use)
- 
