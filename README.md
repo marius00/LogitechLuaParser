@@ -1,4 +1,4 @@
-# Keyboard Scriping Tool
+# Keyboard Scripting Tool
 
 - With support for Logitech G-Keys and Logitech LED
 
