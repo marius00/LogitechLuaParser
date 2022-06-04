@@ -14,9 +14,11 @@ namespace Logitech.Led {
 
 
         public void Start() {
+            LogitechGSDK.DllRegisterServer();
             _isInitialized = LogitechGSDK.LogiLedInitWithName("LogitechLua");
             if (_isInitialized) {
                 LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
+                LogitechGSDK.LogiLedStopEffects();
             }
             else {
                 Logger.Warn("Error initializing logitech LED driver");
@@ -49,6 +51,7 @@ namespace Logitech.Led {
         public void Dispose() {
             if (_isInitialized) {
                 LogitechGSDK.LogiLedShutdown();
+                LogitechGSDK.DllUnregisterServer();
             }
         }
     }

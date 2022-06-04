@@ -176,10 +176,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
-    <Content Include="LogitechGkeyEnginesWrapper.dll">
+    <Content Include="LogitechGkey.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="LogitechLedEnginesWrapper.dll">
+    <Content Include="LogitechLed.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\{F752A6C0-5D8A-4EB1-A25A-3CC275A060C1}.xml">
