@@ -126,7 +126,7 @@ namespace KST.LuaIntegration {
 
         public void OutputLogMessage(string message, params object[] args) {
             try {
-                Logger.Debug(string.Format(message, args));
+                Logger.Info(string.Format(message, args));
             } catch (FormatException ex) {
                 Logger.Warn(ex.Message);
                 Logger.Warn(message + "[" + string.Join(", ", args.Select(arg => arg.ToString())) + "]");
@@ -135,7 +135,7 @@ namespace KST.LuaIntegration {
         }
 
         public void OutputLogMessage(string message) {
-            Logger.Debug(message);
+            Logger.Info(message);
         }
 
     }

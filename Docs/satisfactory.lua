@@ -16,6 +16,16 @@ key = 'e' -- Loot plants
 autorun = false
 holdingLmb = false
 
+function OutputHelpText()
+	OutputLogMessage('')
+	OutputLogMessage('satisfactory.lua mappings are:')
+	OutputLogMessage('')
+	OutputLogMessage('- G5: Hold LMB')
+	OutputLogMessage('- G4: Spam E')
+	OutputLogMessage('- G3: Autorun')
+	OutputLogMessage('- G1: Cancel all scripts')
+end
+
 function reset()
 	spamKey = false
 	SetBacklightColor('G4', 100, 0, 0)
@@ -45,19 +55,19 @@ function toggleSpamKey(keyToSpam)
 	spamKey = not spamKey
 	key = keyToSpam
 	if spamKey then
-		SetBacklightColor('G3', 0, 100, 0)
+		SetBacklightColor('G4', 0, 100, 0)
 	else
-		SetBacklightColor('G3', 100, 0, 0)
+		SetBacklightColor('G4', 100, 0, 0)
 	end
 end
 
 function toggleHoldLmb()
 	holdingLmb = not holdingLmb
 	if holdingLmb then
-		SetBacklightColor('G3', 0, 100, 0)
+		SetBacklightColor('G5', 0, 100, 0)
 		MouseDown('LMB')
 	else
-		SetBacklightColor('G3', 100, 0, 0)
+		SetBacklightColor('G5', 100, 0, 0)
 		MouseUp('LMB')
 	end
 end
@@ -79,6 +89,13 @@ function OnEvent(event, arg, modifiers)
 		elseif arg == 'S' and autorun then
 			stopAutorun()
 		end
+	
+	elseif event == FocusEvent then
+		if arg == 'true' then
+			OutputHelpText()
+		end
+	elseif event == KeyUpEvent then
+		--
 	else
 		OutputLogMessage('Unknown event type: {0}', event)		
 	end
