@@ -150,12 +150,12 @@
             // 
             this.linkOpenFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.linkOpenFolder.AutoSize = true;
-            this.linkOpenFolder.Location = new System.Drawing.Point(507, 147);
+            this.linkOpenFolder.Location = new System.Drawing.Point(500, 147);
             this.linkOpenFolder.Name = "linkOpenFolder";
-            this.linkOpenFolder.Size = new System.Drawing.Size(83, 13);
+            this.linkOpenFolder.Size = new System.Drawing.Size(90, 13);
             this.linkOpenFolder.TabIndex = 11;
             this.linkOpenFolder.TabStop = true;
-            this.linkOpenFolder.Text = "Open Lua folder";
+            this.linkOpenFolder.Text = "Open script folder";
             this.linkOpenFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkOpenFolder_LinkClicked);
             // 
             // btnCancel

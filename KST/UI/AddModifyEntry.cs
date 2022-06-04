@@ -27,6 +27,7 @@ namespace KST.UI {
 
                 DialogResult = DialogResult.None;
             }
+            DialogResult = DialogResult.None;
         }
 
         private void btnPickProcess_Click(object sender, EventArgs e) {
@@ -64,8 +65,8 @@ namespace KST.UI {
                     tbProcess.Text = Path.GetFileNameWithoutExtension(dialog.FileName);
                 }
 
-                DialogResult = DialogResult.None;
             }
+            DialogResult = DialogResult.None;
         }
 
         private void btnCancel_Click(object sender, EventArgs e) {
