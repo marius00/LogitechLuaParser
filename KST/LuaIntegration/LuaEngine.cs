@@ -16,9 +16,9 @@ namespace KST.LuaIntegration {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LuaEngine));
 
         const string Hardcoded = @"
-import ('KST', 'KST.LuaIntegration')
-import ('KST.InputProviders.Args')
-OutputLogMessage = LuaInterface.OutputLogMessage
+function OutputLogMessage(...)
+    provider:OutputLogMessage(...)
+end
 
 function SetBacklightColor(k, r, g, b)
     provider:SetColor(k, r, g, b)
@@ -93,10 +93,10 @@ function IsM3(modifier)
 end
 
 
-TickEvent = LuaEventType.Tick
-KeyDownEvent = LuaEventType.KeyDown
-KeyUpEvent = LuaEventType.KeyUp
-FocusEvent = LuaEventType.Focus
+TickEvent = 1
+KeyDownEvent = 2
+KeyUpEvent = 3
+FocusEvent = 4
 
 
                     ";
@@ -118,8 +118,8 @@ FocusEvent = LuaEventType.Focus
             _lua?.Dispose();
             _lua = new Lua();
             _lua.State.Encoding = Encoding.UTF8;
-            _lua.LoadCLRPackage();
             _lua["provider"] = this;
+            
         }
 
         public void AddTarget(string target) {
@@ -245,11 +245,23 @@ FocusEvent = LuaEventType.Focus
 
             return false;
         }
+        public void OutputLogMessage(string message, params object[] args) {
+            try {
+                Logger.Debug(string.Format(message, args));
+            } catch (FormatException ex) {
+                Logger.Warn(ex.Message);
+                Logger.Warn(message + "[" + string.Join(", ", args.Select(arg => arg.ToString())) + "]");
 
+            }
+        }
+
+        public void OutputLogMessage(string message) {
+            Logger.Debug(message);
+        }
 
         public void OnEvent(LuaEventType eventType, string arg, ushort modifiers) {
             try {
-                _onEvent?.Call(eventType, arg, modifiers);
+                _onEvent?.Call((int)eventType, arg, modifiers);
             }
             catch (NLua.Exceptions.LuaScriptException ex) {
                 Logger.Error("Error executing script");

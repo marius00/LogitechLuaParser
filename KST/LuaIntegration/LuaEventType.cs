@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace KST.LuaIntegration {
     internal enum LuaEventType {
-        Tick, KeyDown, Focus, KeyUp
+        Tick = 1, KeyDown = 2, Focus = 4, KeyUp = 3
     }
 }
