@@ -34,7 +34,6 @@ The purpose of this tool is to correct some of these shortcomings. (and possibly
 ### Missing/TODO:
 * Macro support? (Undecided, is it even possible?)
 * Reset the LUA script on command (currently crashes if called)
-* Anonymous usage stats (webstats)
 * Probably several bugs still not discovered.
 * A fallback profile (if a profile is in use, but does not map this key) + a default profile (if no other profile is in use)
  

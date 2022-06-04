@@ -2,12 +2,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 using System.Threading;
-using System.Web;
-using KST;
-using log4net;
+using System.Windows.Forms;
 using KST.Config;
 using KST.InputProviders;
 using KST.InputProviders.Args;
@@ -16,8 +12,9 @@ using KST.LGS;
 using KST.LuaIntegration;
 using KST.Settings;
 using KST.UI;
+using log4net;
 
-namespace Logitech {
+namespace KST {
     internal class Program {
         private static volatile bool _isRunning = true;
         private static volatile bool _isLuaThreadRunning = false;
@@ -28,7 +25,7 @@ namespace Logitech {
         [STAThread]
         static void Main(string[] args) {
             Logger.Info("Starting KST..");
-            CopyInitialFiles();
+            Initialize();
 
             List<IDisposable> disposables = new List<IDisposable>();
 
@@ -46,6 +43,9 @@ namespace Logitech {
 
             MouseInputProvider mouseInputProvider = new MouseInputProvider();
             disposables.Add(mouseInputProvider);
+            if (!SettingsReader.Load(AppPaths.SettingsFile).NoAnonymousUsageStats) {
+                disposables.Add(new UsageStatisticsReporter());
+            }
 
             try {
                 nativeKeyboardHook.Start();
@@ -146,21 +146,30 @@ namespace Logitech {
 
             LgsProfileUtil.Install();
             GHubProfileUtil.Install();
-        }
-        /*
-        
-        /*
-         Desired functionality:
-         * G-Macro support?
-         * Mouseclick events (?)
-         * Anon stats
 
-         * Delay "on change" events for .lua files.
-         *
-         * KeyUp events, test if this can be used to detect clicking W with autorun on
-         * Expand settings to keep "isminimized" and "isfirstrun"?
-         * Toast informing of where it minimized?
-         *
-         */
+        }
+
+        private static void Initialize() {
+            Logger.Info("Source code available at https://github.com/marius00/KeyboardScriptingTool");
+
+            CopyInitialFiles();
+            InitializeUuid();
+
+            var settings = SettingsReader.Load(AppPaths.SettingsFile);
+            if (!settings.NoAnonymousUsageStats) {
+                UsageStatisticsReporter.Uuid = settings.Uuid;
+                UsageStatisticsReporter.UrlStats = "https://webstats.evilsoft.net/report/kst";
+                UsageStatisticsReporter.ReportUsageAsync();
+            }
+        }
+
+        private static void InitializeUuid() {
+            var settings = SettingsReader.Load(AppPaths.SettingsFile);
+
+            if (string.IsNullOrEmpty(settings.Uuid)) { 
+                settings.Uuid = Guid.NewGuid().ToString();
+                SettingsReader.Persist(AppPaths.SettingsFile, settings);
+            }
+        }
     }
 }

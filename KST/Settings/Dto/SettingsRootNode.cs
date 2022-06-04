@@ -10,5 +10,7 @@ namespace KST.Settings.Dto {
         public bool MinimizeToTray { get; set; }
         public bool StartMinimized { get; set; }
         public bool FirstRun { get; set; }
+        public bool NoAnonymousUsageStats { get; set; }
+        public string Uuid { get; set; }
     }
 }

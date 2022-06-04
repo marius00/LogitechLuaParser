@@ -109,6 +109,7 @@
     <Compile Include="Config\AppPaths.cs" />
     <Compile Include="Config\LogitechPaths.cs" />
     <Compile Include="Config\TextBoxAppender.cs" />
+    <Compile Include="Config\UsageStatisticsReporter.cs" />
     <Compile Include="InputProviders\Args\InputEventArg.cs" />
     <Compile Include="InputProviders\Args\InputEventHandler.cs" />
     <Compile Include="InputProviders\Args\InputEventType.cs" />
