@@ -1,19 +1,19 @@
-#define ApplicationVersion GetFileVersion('..\installer\Logitech.exe')
-#define ProductVersion GetStringFileInfo('..\installer\Logitech.exe', 'ProductVersion')
+#define ApplicationVersion GetFileVersion('..\installer\KST.exe')
+#define ProductVersion GetStringFileInfo('..\installer\KST.exe', 'ProductVersion')
 #define FindFolder(Path) \
     Local[0] = FindFirst(Path, faDirectory), \
     Local[0] ? AddBackslash(ExtractFileDir(Path)) + FindGetFileName(Local[0]) : Path
 	
 	
 [Setup]
-AppVerName=LogiLed
-AppName=LogiLed (c) EvilSoft
+AppVerName=KST
+AppName=KST (c) EvilSoft
 VersionInfoVersion={#ApplicationVersion}
-AppId=logiled
-DefaultDirName={code:DefDirRoot}\LogiLed
+AppId=kst
+DefaultDirName={code:DefDirRoot}\KST
 Uninstallable=Yes
 OutputDir=..\Installer
-SetupIconFile=..\logitech\icon.ico
+SetupIconFile=..\kst\icon.ico
 
 
 [Tasks]
@@ -22,16 +22,16 @@ Name: starticon; Description: "Create a &startmenu icon"; GroupDescription: "Ico
 
 
 [Icons]
-Name: "{commonprograms}\Logitech"; Filename: "{app}\\Logitech.exe"; Tasks: starticon
-Name: "{commondesktop}\Logitech"; Filename: "{app}\\Logitech.exe"; Tasks: desktopicon
+Name: "{commonprograms}\KST"; Filename: "{app}\\KST.exe"; Tasks: starticon
+Name: "{commondesktop}\KST"; Filename: "{app}\\KST.exe"; Tasks: desktopicon
 
 
 [Files]
-Source: "{#FindFolder("..\Logitech\bin\Release\*")}\*.*"; Excludes: "*.pdb"; DestDir: "{app}"; Flags: overwritereadonly replacesameversion recursesubdirs createallsubdirs touch ignoreversion
+Source: "{#FindFolder("..\KST\bin\Release\*")}\*.*"; Excludes: "*.pdb"; DestDir: "{app}"; Flags: overwritereadonly replacesameversion recursesubdirs createallsubdirs touch ignoreversion
 Source: "readme.txt"; DestDir: "{app}";
 
 [Run]
-Filename: "{app}\Logitech.exe"; Description: "Launch Logitech"; Flags: postinstall nowait
+Filename: "{app}\KST.exe"; Description: "Launch KST"; Flags: postinstall nowait
 
 
 
@@ -47,7 +47,7 @@ DisableWelcomePage=Yes
 ArchitecturesInstallIn64BitMode=x64
 AlwaysShowDirOnReadyPage=Yes
 DisableDirPage=No
-OutputBaseFilename=LogiLedInstaller
+OutputBaseFilename=KSTInstaller
 InfoAfterFile=readme.txt
 
 

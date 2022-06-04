@@ -1,1 +1,1 @@
-Anonymous usage statistics is collected and displayed at https://webstats.evilsoft.net/zipbackup
+Anonymous usage statistics is collected and displayed at https://webstats.evilsoft.net/kst
