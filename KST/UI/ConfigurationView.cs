@@ -114,9 +114,10 @@ namespace KST.UI {
         }
 
         private void btnDelete_Click(object sender, EventArgs e) {
-            if (MessageBox.Show("Are you sure?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button2) != DialogResult.Yes) return;
 
             foreach (var entry in listView1.SelectedItems) {
+                if (MessageBox.Show("Are you sure?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button2) != DialogResult.Yes) return;
+
                 ListViewItem lvi = (ListViewItem)entry;
                 var tag = lvi.Tag.ToString();
 
@@ -143,6 +144,14 @@ namespace KST.UI {
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e) {
             btnDelete_Click(null, null);
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e) {
+            var enabled = listView1.SelectedItems.Count > 0;
+            foreach (var elem in contextMenuStrip1.Items) {
+                ToolStripMenuItem item = elem as ToolStripMenuItem;
+                item.Enabled = enabled;
+            }
         }
     }
 }
