@@ -56,7 +56,7 @@ namespace KST.Config {
                 try {
                     _textBox.BeginInvoke(del, msg);
                 }
-                catch (System.InvalidOperationException ex) {
+                catch (System.InvalidOperationException) {
                     /* Probably logging in the middle of a shutdown. Window just got destroyed */
                 }
             }

@@ -136,5 +136,13 @@ namespace KST.UI {
         private void linkViewLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             Process.Start(Path.Combine(AppPaths.CoreFolder, "log.txt"));
         }
+
+        private void modifyToolStripMenuItem_Click(object sender, EventArgs e) {
+            btnModify_Click(null, null);
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e) {
+            btnDelete_Click(null, null);
+        }
     }
 }

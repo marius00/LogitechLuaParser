@@ -37,5 +37,14 @@ namespace KST.UI {
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e) {
             _minimizeToTrayHandler.notifyIcon_MouseDoubleClick(sender, e);
         }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e) {
+            _minimizeToTrayHandler.notifyIcon_MouseDoubleClick(sender, null);
+
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+            this.Close();
+        }
     }
 }
