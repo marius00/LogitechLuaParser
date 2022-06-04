@@ -97,140 +97,48 @@ TickEvent = 1
 KeyDownEvent = 2
 KeyUpEvent = 3
 FocusEvent = 4
-
-
-                    ";
+";
 
         private Lua _lua;
         private LuaFunction _onEvent;
-        private readonly LogitechLedProvider _ledProvider;
         private readonly List<string> _targets = new List<string>();
-        private readonly InputSimulator _simulator = new InputSimulator();
+        private bool _resetStateQueued = false;
+        private string _newScriptQueued = string.Empty;
+        private readonly LuaIntegration _integration;
 
         public LuaEngine(LogitechLedProvider ledProvider, string script) {
-            _ledProvider = ledProvider;
-            
-            ResetState();
+            _integration = new LuaIntegration(ledProvider, _targets);
+
+            _lua = new Lua();
+            _lua.State.Encoding = Encoding.UTF8;
+            _lua["provider"] = _integration;
+            _resetStateQueued = false;
+
             SetScript(script);
         }
 
         public void ResetState() {
-            _lua?.Dispose();
-            _lua = new Lua();
-            _lua.State.Encoding = Encoding.UTF8;
-            _lua["provider"] = this;
-            
+            _resetStateQueued = true;
+        }
+
+        public void ExecuteQueuedActions() {
+            if (_resetStateQueued) {
+                _lua?.Dispose();
+                _lua = new Lua();
+                _lua.State.Encoding = Encoding.UTF8;
+                _lua["provider"] = _integration;
+                _resetStateQueued = false;
+            }
+
+
         }
 
         public void AddTarget(string target) {
             _targets.Add(target);
         }
 
-        private bool HasFocus => _targets.Any(m => m.Equals(Win32.GetForegroundProcessName(), StringComparison.CurrentCultureIgnoreCase));
 
-        public void SetColor(string key, int r, int g, int b) {
-            if (HasFocus)
-                _ledProvider.SetColor(key, r, g, b);
-        }
-
-        public void MouseMove(int x, int y) {
-            _simulator.Mouse.MoveMouseBy(x, y);
-        }
-
-        public void MouseDown(string key) {
-            if (key == "LMB") {
-                _simulator.Mouse.LeftButtonDown();
-            } else if (key == "RMB") {
-                _simulator.Mouse.RightButtonDown();
-            } else if (key == "MMB") {
-                _simulator.Mouse.MiddleButtonDown();
-            } else {
-                Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
-            }
-        }
-
-        public void MouseUp(string key) {
-            if (key == "LMB") {
-                _simulator.Mouse.LeftButtonUp();
-            } else if (key == "RMB") {
-                _simulator.Mouse.RightButtonUp();
-            } else if (key == "MMB") {
-                _simulator.Mouse.MiddleButtonUp();
-            } else {
-                Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
-            }
-        }
-
-        public void MouseClick(string key) {
-            if (key == "LMB") {
-                _simulator.Mouse.LeftButtonClick();
-            } else if (key == "RMB") {
-                _simulator.Mouse.RightButtonClick();
-            } else if (key == "MMB") {
-                _simulator.Mouse.MiddleButtonClick();
-            } else {
-                Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
-            }
-        }
-
-        public void MouseDoubleClick(string key) {
-            if (key == "LMB") {
-                _simulator.Mouse.LeftButtonDoubleClick();
-            } else if (key == "RMB") {
-                _simulator.Mouse.RightButtonDoubleClick();
-            } else if (key == "MMB") {
-                _simulator.Mouse.MiddleButtonDoubleClick();
-            } else {
-                Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
-            }
-
-
-        }
-
-
-
-        // https://github.com/GregsStack/InputSimulatorStandard
-        public void KeyDown(string key) {
-            if (KeyMapper.IsValidKeyCode(key)) {
-                _simulator.Keyboard.KeyDown(KeyMapper.TranslateToKeyCode(key));
-                if (HasFocus) {
-                    _simulator.Keyboard.KeyDown(KeyMapper.TranslateToKeyCode(key));
-                }
-            } else {
-                Logger.Warn($"Invalid key \"{key}\"");
-            }
-        }
-
-        public void KeyUp(string key) {
-            if (KeyMapper.IsValidKeyCode(key)) {
-                if (HasFocus) {
-                    _simulator.Keyboard.KeyUp(KeyMapper.TranslateToKeyCode(key));
-                }
-            }
-            else {
-                Logger.Warn($"Invalid key \"{key}\"");
-            }
-        }
-
-        public void KeyPress(string key) {
-            if (KeyMapper.IsValidKeyCode(key)) {
-                if (HasFocus) {
-                    _simulator.Keyboard.KeyPress(KeyMapper.TranslateToKeyCode(key));
-                }
-            }
-            else {
-                Logger.Warn($"Invalid key \"{key}\"");
-            }
-        }
-
-        public void Sleep(int milliseconds) {
-            Thread.Sleep(milliseconds);
-        }
-
-        public long Time() {
-            return (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
-        }
-
+        // TODO: Queue this to run on the Lua thread, to prevent race conditions
         public bool SetScript(string script) {
             try {
                 _onEvent = null;
@@ -244,19 +152,6 @@ FocusEvent = 4
             }
 
             return false;
-        }
-        public void OutputLogMessage(string message, params object[] args) {
-            try {
-                Logger.Debug(string.Format(message, args));
-            } catch (FormatException ex) {
-                Logger.Warn(ex.Message);
-                Logger.Warn(message + "[" + string.Join(", ", args.Select(arg => arg.ToString())) + "]");
-
-            }
-        }
-
-        public void OutputLogMessage(string message) {
-            Logger.Debug(message);
         }
 
         public void OnEvent(LuaEventType eventType, string arg, ushort modifiers) {
