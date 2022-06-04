@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{75E00417-9251-46CB-9A82-51EBD685C950}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Logitech</RootNamespace>
-    <AssemblyName>Logitech</AssemblyName>
+    <RootNamespace>KST</RootNamespace>
+    <AssemblyName>KST</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

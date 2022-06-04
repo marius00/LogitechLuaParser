@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using log4net;
 
-namespace Logitech.Led {
+namespace KST.Led {
     /// <summary>
     /// Color integration for Logitech keyboards.
     /// Allows setting colors per-key on keyboards with support for this.

@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using InputSimulatorStandard.Native;
-using Logitech.InputProviders.Args;
+using KST.InputProviders.Args;
 
-namespace Logitech.InputProviders {
+namespace KST.InputProviders {
     /// <summary>
     /// Keyboard hook for global key events
     /// Regular keys only (No support for Logitech G-keys etc)

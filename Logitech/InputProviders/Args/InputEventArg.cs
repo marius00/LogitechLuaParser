@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logitech.InputProviders.Args {
+namespace KST.InputProviders.Args {
     public class InputEventArg : EventArgs {
         public InputEventArg(string key, ushort modifiers, InputEventType type) {
             Key = key;

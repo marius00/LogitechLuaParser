@@ -1,4 +1,4 @@
-﻿namespace Logitech.UI {
+﻿namespace KST.UI {
     partial class AddModifyEntry {
         /// <summary>
         /// Required designer variable.

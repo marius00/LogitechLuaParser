@@ -1,4 +1,4 @@
-﻿namespace Logitech.Settings.Dto {
+﻿namespace KST.Settings.Dto {
     /// <summary>
     /// JSON Schema definition for "settings.json"
     /// Settings.json is a LuaScriptEntry[]

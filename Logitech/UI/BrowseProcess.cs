@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using log4net;
 
-namespace Logitech.UI {
+namespace KST.UI {
     public partial class BrowseProcess : Form {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(BrowseProcess));
 

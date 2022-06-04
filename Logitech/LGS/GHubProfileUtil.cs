@@ -7,10 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using log4net;
-using Logitech.Config;
+using KST.Config;
 using Newtonsoft.Json.Linq;
 
-namespace Logitech.LGS {
+namespace KST.LGS {
     /// <summary>
     /// Responsible for adding profiles to Logitech Gaming Software
     /// </summary>

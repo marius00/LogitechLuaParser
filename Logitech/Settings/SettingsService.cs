@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using log4net;
-using Logitech.Config;
-using Logitech.Led;
-using Logitech.LuaIntegration;
+using KST.Config;
+using KST.Led;
+using KST.LuaIntegration;
 
-namespace Logitech.Settings {
+namespace KST.Settings {
     /// <summary>
     /// Responsible for emitting events with up-to-date script info
     /// Will read settings.json upon start, and continue to monitor the settings file and lua files for changes.

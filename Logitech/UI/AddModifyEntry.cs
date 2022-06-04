@@ -2,9 +2,9 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Windows.Forms;
-using Logitech.Config;
+using KST.Config;
 
-namespace Logitech.UI {
+namespace KST.UI {
     public partial class AddModifyEntry : Form {
         public string Description { get; set; } = string.Empty;
         public string Script { get; set; } = string.Empty;

@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Logitech.Config;
-using Logitech.Settings;
+using KST.Config;
+using KST.Settings;
 
-namespace Logitech.UI {
+namespace KST.UI {
     public partial class MainContainer : Form {
         MinimizeToTrayHandler _minimizeToTrayHandler;
         public MainContainer() {

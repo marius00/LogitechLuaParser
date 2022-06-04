@@ -1,4 +1,4 @@
-﻿namespace Logitech.UI {
+﻿namespace KST.UI {
     partial class BrowseProcess {
         /// <summary>
         /// Required designer variable.

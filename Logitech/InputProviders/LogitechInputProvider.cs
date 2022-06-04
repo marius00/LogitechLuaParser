@@ -4,9 +4,9 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using InputSimulatorStandard.Native;
 using log4net;
-using Logitech.InputProviders.Args;
+using KST.InputProviders.Args;
 
-namespace Logitech.InputProviders {
+namespace KST.InputProviders {
     /// <summary>
     /// Input provider for G-keys
     /// </summary>

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using log4net;
-using Logitech.Settings;
+using KST.Settings;
 
-namespace Logitech.UI {
+namespace KST.UI {
     class MinimizeToTrayHandler : IDisposable {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MinimizeToTrayHandler));
         private FormWindowState _previousWindowState = FormWindowState.Normal;

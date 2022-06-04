@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Logitech.InputProviders {
+namespace KST.InputProviders {
     /// <summary>
     /// Keyboard hook for local Logitech key events
     /// Logitech keys only (G-keys etc)

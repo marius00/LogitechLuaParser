@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using log4net;
-using Logitech.Settings.Dto;
+using KST.Settings.Dto;
 using Newtonsoft.Json;
 
-namespace Logitech.Settings {
+namespace KST.Settings {
     /// <summary>
     /// Reads settings.json and parses the result
     /// </summary>

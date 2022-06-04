@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using log4net;
-using Logitech.InputProviders.Args;
+using KST.InputProviders.Args;
 
-namespace Logitech.InputProviders {
+namespace KST.InputProviders {
     internal class MouseInputProvider : IDisposable {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(MouseInputProvider));
         private volatile bool _isRunning = true;

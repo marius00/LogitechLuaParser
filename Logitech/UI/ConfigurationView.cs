@@ -9,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Logitech.Config;
-using Logitech.Settings;
-using Logitech.Settings.Dto;
+using KST.Config;
+using KST.Settings;
+using KST.Settings.Dto;
 
-namespace Logitech.UI {
+namespace KST.UI {
     public partial class ConfigurationView : Form {
         public ConfigurationView() {
             InitializeComponent();

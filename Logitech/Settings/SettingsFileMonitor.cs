@@ -2,9 +2,9 @@
 using System.IO;
 using System.Security.Permissions;
 using log4net;
-using Logitech.Config;
+using KST.Config;
 
-namespace Logitech.Settings {
+namespace KST.Settings {
     /// <summary>
     /// Monitors the settings folder for changes
     /// Will notify about changes to files, to reload LUA and JSON files

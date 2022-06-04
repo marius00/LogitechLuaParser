@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using log4net.Appender;
 using log4net.Core;
 
-namespace Logitech.Config {
+namespace KST.Config {
 
     // https://stackoverflow.com/questions/14114614/configuring-log4net-textboxappender-custom-appender-via-xml-file
     public class TextBoxAppender : AppenderSkeleton {
@@ -53,7 +53,12 @@ namespace Logitech.Config {
                     }
                     _textBox.AppendText(s);
                 });
-                _textBox.BeginInvoke(del, msg);
+                try {
+                    _textBox.BeginInvoke(del, msg);
+                }
+                catch (System.InvalidOperationException ex) {
+                    /* Probably logging in the middle of a shutdown. Window just got destroyed */
+                }
             }
         }
     }

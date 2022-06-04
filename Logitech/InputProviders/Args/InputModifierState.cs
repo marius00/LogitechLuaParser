@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logitech.InputProviders.Args {
+namespace KST.InputProviders.Args {
     internal enum InputModifierState {
         Shift = 2,
         Ctrl = 4,

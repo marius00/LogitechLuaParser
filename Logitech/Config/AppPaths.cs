@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logitech.Config {
+namespace KST.Config {
     /// <summary>
     /// Hardcoded paths to settings/logging/etc
     /// </summary>
@@ -40,7 +40,7 @@ namespace Logitech.Config {
 
         public static string CoreFolder {
             get {
-                string path = Path.Combine(LocalAppdata, "EvilSoft", "LogiLed");
+                string path = Path.Combine(LocalAppdata, "EvilSoft", "KST");
                 Directory.CreateDirectory(path);
                 
                 return path;

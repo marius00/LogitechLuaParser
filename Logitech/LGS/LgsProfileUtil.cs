@@ -7,10 +7,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using log4net;
-using Logitech.Config;
+using KST.Config;
 using Newtonsoft.Json.Linq;
 
-namespace Logitech.LGS {
+namespace KST.LGS {
     /// <summary>
     /// Responsible for adding profiles to Logitech Gaming Software
     /// </summary>
@@ -43,11 +43,11 @@ namespace Logitech.LGS {
                 var assemblyPath = Assembly.GetEntryAssembly().Location.Replace("\\\\", "\\").ToUpperInvariant();
                 var text = File.ReadAllText(LogitechPaths.DefaultProfile);
                 if (!text.Contains(assemblyPath)) {
-                    Logger.Info("Installing LogiLed into the Logitech Gaming Software default profile");
+                    Logger.Info("Installing KST into the Logitech Gaming Software default profile");
                     text = text.Replace("</description>", "</description>\n    " + $"<target path=\"{assemblyPath}\"/>");
 
                     // Backup existing config and write in the software location
-                    File.Copy(LogitechPaths.DefaultProfile, Path.Combine(AppPaths.CoreFolder, LogitechPaths.DefaultProfileFilename));
+                    File.Copy(LogitechPaths.DefaultProfile, Path.Combine(AppPaths.CoreFolder, LogitechPaths.DefaultProfileFilename + "-bak" + DateTimeOffset.UtcNow.Ticks));
                     File.WriteAllText(LogitechPaths.DefaultProfile, text);
                     RestartLgs();
                 }

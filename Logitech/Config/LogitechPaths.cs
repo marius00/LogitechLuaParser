@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Logitech.Config {
+namespace KST.Config {
     /// <summary>
     /// Paths for Logitech Gaming Software profile
     /// </summary>

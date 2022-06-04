@@ -2,7 +2,7 @@
 using System.Linq;
 using log4net;
 
-namespace Logitech.LuaIntegration {
+namespace KST.LuaIntegration {
     public class LuaInterface {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LuaInterface));
         public static void OutputLogMessage(string message, params object[] args) {

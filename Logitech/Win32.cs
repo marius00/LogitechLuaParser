@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Logitech {
+namespace KST {
     internal class Win32 {
         // The GetForegroundWindow function returns a handle to the foreground window
         // (the window  with which the user is currently working).

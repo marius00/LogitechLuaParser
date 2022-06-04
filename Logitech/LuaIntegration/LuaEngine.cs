@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading;
 using InputSimulatorStandard;
 using log4net;
-using Logitech.Led;
+using KST.Led;
 using NLua;
 
-namespace Logitech.LuaIntegration {
+namespace KST.LuaIntegration {
     /// <summary>
     /// One per game/script
     /// </summary>
@@ -16,8 +16,8 @@ namespace Logitech.LuaIntegration {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LuaEngine));
 
         const string Hardcoded = @"
-import ('Logitech', 'Logitech.LuaIntegration')
-import ('Logitech.InputProviders.Args')
+import ('KST', 'KST.LuaIntegration')
+import ('KST.InputProviders.Args')
 OutputLogMessage = LuaInterface.OutputLogMessage
 
 function SetBacklightColor(k, r, g, b)

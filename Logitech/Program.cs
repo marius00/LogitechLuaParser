@@ -6,15 +6,16 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
 using System.Web;
+using KST;
 using log4net;
-using Logitech.Config;
-using Logitech.InputProviders;
-using Logitech.InputProviders.Args;
-using Logitech.Led;
-using Logitech.LGS;
-using Logitech.LuaIntegration;
-using Logitech.Settings;
-using Logitech.UI;
+using KST.Config;
+using KST.InputProviders;
+using KST.InputProviders.Args;
+using KST.Led;
+using KST.LGS;
+using KST.LuaIntegration;
+using KST.Settings;
+using KST.UI;
 
 namespace Logitech {
     internal class Program {
@@ -26,7 +27,7 @@ namespace Logitech {
 
         [STAThread]
         static void Main(string[] args) {
-            Logger.Info("Starting LogiLed..");
+            Logger.Info("Starting KST..");
             CopyInitialFiles();
 
             List<IDisposable> disposables = new List<IDisposable>();
@@ -124,7 +125,7 @@ namespace Logitech {
                 }
             }
 
-            Logger.Info("LogiLed terminated");
+            Logger.Info("KST terminated");
         }
 
         /// <summary>

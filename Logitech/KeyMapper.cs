@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using InputSimulatorStandard.Native;
+using KST.Led;
 using log4net;
-using Logitech.Led;
 
-namespace Logitech {
+namespace KST {
     internal static class KeyMapper {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(KeyMapper));
 

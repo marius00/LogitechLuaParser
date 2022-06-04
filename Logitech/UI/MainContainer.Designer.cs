@@ -1,4 +1,4 @@
-﻿namespace Logitech.UI {
+﻿namespace KST.UI {
     partial class MainContainer {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,7 @@
             // notifyIcon1
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "LogiLed - Name Pending";
+            this.notifyIcon1.Text = "KST - Keyboard Scripting Tool";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
@@ -42,7 +42,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainContainer";
-            this.Text = "LogiLed - Name Pending";
+            this.Text = "KST - Keyboard Scripting Tool";
             this.Load += new System.EventHandler(this.MainContainer_Load);
             this.ResumeLayout(false);
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logitech.Led {
+namespace KST.Led {
     internal enum LogitechKeyMapping {
 
         ESC = 0x01,

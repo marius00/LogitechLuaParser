@@ -1,4 +1,4 @@
-﻿namespace Logitech.UI {
+﻿namespace KST.UI {
     partial class ConfigurationView {
         /// <summary>
         /// Required designer variable.

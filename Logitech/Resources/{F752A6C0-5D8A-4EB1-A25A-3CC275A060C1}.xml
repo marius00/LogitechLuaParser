@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <profiles xmlns="http://www.logitech.com/Cassandra/2010.7/Profile">
-  <profile gameid="" guid="{F752A6C0-5D8A-4EB1-A25A-3CC275A060C1}" lastplayeddate="2022-05-27T10:27:33" lock="0" launchable="1" gpasupported="0" name="LogiLed" gkeysdk="1">
+  <profile gameid="" guid="{F752A6C0-5D8A-4EB1-A25A-3CC275A060C1}" lastplayeddate="2022-05-27T10:27:33" lock="0" launchable="1" gpasupported="0" name="KST" gkeysdk="1">
     <description></description>
     <target path="F:\Program Files (x86)\Steam\steamapps\common\Satisfactory\FactoryGame.exe"/>
     <target path="F:\Program Files (x86)\Steam\steamapps\common\Satisfactory\Engine\Binaries\Win64\FactoryGame-Win64-Shipping.exe"/>

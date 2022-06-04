@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logitech.Settings.Dto {
+namespace KST.Settings.Dto {
     public class SettingsRootNode {
         public List<LuaScriptEntry> Entries { get; set; }
         public bool MinimizeToTray { get; set; }

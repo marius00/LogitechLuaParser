@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logitech.Led {
+namespace KST.Led {
 
 
     public enum DeviceType {

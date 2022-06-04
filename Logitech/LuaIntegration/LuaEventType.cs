@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logitech.LuaIntegration {
+namespace KST.LuaIntegration {
     internal enum LuaEventType {
         Tick, KeyDown, Focus, KeyUp
     }
