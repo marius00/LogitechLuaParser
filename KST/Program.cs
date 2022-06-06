@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using KST.Config;
@@ -24,6 +27,22 @@ namespace KST {
 
         [STAThread]
         static void Main(string[] args) {
+            Guid guid = new Guid("{6E86E5D8-A735-4486-822B-2AAC10557CEB}");
+            using (SingleInstance singleInstance = new SingleInstance(guid)) {
+                if (singleInstance.IsFirstInstance) {
+                    Run();
+                }
+                else {
+                    
+                    MessageBox.Show("KST is already running\nIt is most likely minimized to tray.", "Already running", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Process p = Process.GetProcessesByName("KST").FirstOrDefault();
+                    if (p == null) return;
+                }
+            }
+        }
+
+        private static void Run() {
+
             Logger.Info("Starting KST..");
             Initialize();
 
