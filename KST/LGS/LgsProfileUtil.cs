@@ -45,7 +45,7 @@ namespace KST.LGS {
                 var xml = File.ReadAllText(LogitechPaths.DefaultProfile);
                 
 
-                if (!xml.Contains(assemblyPath) || true) {
+                if (!xml.Contains(assemblyPath)) {
                     Logger.Info("Installing KST into the Logitech Gaming Software default profile");
                     xml = StripExistingTargetEntry(xml);
                     xml = xml.Replace("</description>", "</description>\n    " + $"<target path=\"{assemblyPath}\"/>");

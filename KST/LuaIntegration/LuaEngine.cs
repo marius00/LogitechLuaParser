@@ -92,6 +92,10 @@ function IsM3(modifier)
     return (modifier & InputModifierStateHelper.GetValue(InputModifierState.M3)) > 0
 end
 
+function SetOutputPrefix(prefix)
+    provider:SetOutputPrefix(prefix)
+end
+
 
 TickEvent = 1
 KeyDownEvent = 2

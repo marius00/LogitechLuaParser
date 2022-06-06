@@ -14,6 +14,7 @@ namespace KST.LuaIntegration {
         private readonly LogitechLedProvider _ledProvider;
         private readonly InputSimulator _simulator = new InputSimulator();
         private readonly List<string> _targets;
+        private string _outputPrefix = string.Empty;
 
         public LuaIntegration(LogitechLedProvider ledProvider, List<string> targets) {
             _ledProvider = ledProvider;
@@ -126,7 +127,7 @@ namespace KST.LuaIntegration {
 
         public void OutputLogMessage(string message, params object[] args) {
             try {
-                Logger.Info(string.Format(message, args));
+                Logger.Info(_outputPrefix + string.Format(message, args));
             } catch (FormatException ex) {
                 Logger.Warn(ex.Message);
                 Logger.Warn(message + "[" + string.Join(", ", args.Select(arg => arg.ToString())) + "]");
@@ -135,7 +136,15 @@ namespace KST.LuaIntegration {
         }
 
         public void OutputLogMessage(string message) {
-            Logger.Info(message);
+            Logger.Info(_outputPrefix + message);
+        }
+
+        /// <summary>
+        /// Sets the output prefix for log messages, ex [SomeGame]
+        /// </summary>
+        /// <param name="prefix"></param>
+        public void SetOutputPrefix(string prefix) {
+            _outputPrefix = prefix;
         }
 
     }

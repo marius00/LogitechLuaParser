@@ -31,6 +31,10 @@ OutputLogMessage('Starting script with W and S being Green')
 -- IsM2(modifiers)
 -- IsM3(modifiers)
 
+OutputLogMessage('Text with no prefix')
+SetOutputPrefix("[SomeGame] ")
+OutputLogMessage('Text with prefix')
+
 active = false
 function OnEvent(event, arg, modifiers)
 	if event == TickEvent then

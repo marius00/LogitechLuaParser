@@ -4,6 +4,7 @@ SetBacklightColor('G1', 0, 0, 100)
 SetBacklightColor('G3', 100, 0, 0)
 SetBacklightColor('G4', 100, 0, 0)
 SetBacklightColor('G5', 100, 0, 0)
+SetOutputPrefix("[STF] ")
 
 -- G5 holds down the left mouse button (manual crafting)
 -- G4 spams "e" (loot plants)
