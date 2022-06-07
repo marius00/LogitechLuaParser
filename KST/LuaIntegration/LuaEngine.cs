@@ -69,27 +69,27 @@ function time()
 end
 
 function IsShift(modifier)
-    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.Shift)) > 0
+    return (modifier & 2) > 0
 end
 
 function IsCtrl(modifier)
-    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.Ctrl)) > 0
+    return (modifier & 4) > 0
 end
 
 function IsAlt(modifier)
-    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.Alt)) > 0
+    return (modifier & 8) > 0
 end
 
 function IsM1(modifier)
-    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.M1)) > 0
+    return (modifier & 16) > 0
 end
 
 function IsM2(modifier)
-    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.M2)) > 0
+    return (modifier & 32) > 0
 end
 
 function IsM3(modifier)
-    return (modifier & InputModifierStateHelper.GetValue(InputModifierState.M3)) > 0
+    return (modifier & 64) > 0
 end
 
 function SetOutputPrefix(prefix)

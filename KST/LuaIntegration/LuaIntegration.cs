@@ -21,7 +21,7 @@ namespace KST.LuaIntegration {
             _targets = targets;
         }
 
-
+        // TODO: This will not scale well, if we have multiple scripts running we'll end up calling Win32.GetForegroundProcessName() N times. It's currently the #1 cause for CPU usage
         private bool HasFocus => _targets.Any(m => m.Equals(Win32.GetForegroundProcessName(), StringComparison.CurrentCultureIgnoreCase));
 
         public void SetColor(string key, int r, int g, int b) {

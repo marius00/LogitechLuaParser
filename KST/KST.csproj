@@ -115,7 +115,6 @@
     <Compile Include="InputProviders\Args\InputEventHandler.cs" />
     <Compile Include="InputProviders\Args\InputEventType.cs" />
     <Compile Include="InputProviders\Args\InputModifierState.cs" />
-    <Compile Include="InputProviders\Args\InputModifierStateHelper.cs" />
     <Compile Include="InputProviders\LogitechInputProvider.cs" />
     <Compile Include="InputProviders\LogitechGKeys.cs" />
     <Compile Include="InputProviders\InterceptKeys.cs" />

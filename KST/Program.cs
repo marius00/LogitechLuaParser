@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using KST.Config;
@@ -79,11 +78,12 @@ namespace KST {
                     ConcurrentQueue<InputEventArg> eventQueue = new ConcurrentQueue<InputEventArg>();
 
                     void HandleInputEvent(object _, InputEventArg arg) {
-                        if (settingsService.IsProcessRelevant(Win32.GetForegroundProcessName())) {
+                        var process = Win32.GetForegroundProcessName();
+                        if (settingsService.IsProcessRelevant(process)) {
                             eventQueue.Enqueue(arg);
                         }
                         else {
-                            Logger.Debug($"Ignoring key event, process: {Win32.GetForegroundProcessName()}");
+                            Logger.Debug($"Ignoring key event, process: {process}");
                         }
                     }
 

@@ -29,7 +29,7 @@ The purpose of this tool is to correct some of these shortcomings. (and possibly
 
 ### Example scripts:
 * Satisfactory (autorun and spam E) ([satisfactory.lua](./Docs/satisfactory.lua))
-* Example script ([example.lua](./Logitech/Resources/example.lua))
+* Example script ([example.lua](./KST/Resources/example.lua))
 
 ### Missing/TODO:
 * Macro support? (Undecided, is it even possible?)
