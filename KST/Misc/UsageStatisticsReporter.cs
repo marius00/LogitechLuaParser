@@ -7,7 +7,7 @@ using System.Threading;
 using log4net;
 using Timer = System.Timers.Timer;
 
-namespace KST.Config {
+namespace KST.Misc {
     internal class UsageStatisticsReporter : IDisposable {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(UsageStatisticsReporter));
         private readonly Timer _timer;

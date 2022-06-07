@@ -12,6 +12,7 @@ using KST.InputProviders.Args;
 using KST.Led;
 using KST.LGS;
 using KST.LuaIntegration;
+using KST.Misc;
 using KST.Settings;
 using KST.UI;
 using log4net;
@@ -70,6 +71,7 @@ namespace KST {
                 ledProvider.Start();
                 logitechInputProvider.Start();
                 mouseInputProvider.Start();
+                IdleSleeper idleSleeper = new IdleSleeper();
 
 
                 new Thread(() => {
@@ -121,6 +123,7 @@ namespace KST {
                         }
 
                         lastProcess = processName;
+                        idleSleeper.SetStatus(lastProcessRelevant);
                     }
 
                     _isLuaThreadRunning = false;

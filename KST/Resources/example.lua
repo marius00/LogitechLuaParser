@@ -56,12 +56,6 @@ function OnEvent(event, arg, modifiers)
 			else
 				SetBacklightColor(arg, 0, 0, 0)
 			end
-		elseif arg == 'ESCAPE' then
-			-- ResetScript() -- This currently crashes and burns, TODO: Fix it.
-			-- This will reload the script. All LUA state will reset.
-			-- It will however NOT revert colors back to original state, or release any pressed keys.
-			-- If LMB for example is pressed during this, it will only cancel once a regular mouseclick has been made.
-			-- For colors, it's recommended to start the script by setting the desired "default colors"
 		end
 	elseif event == KeyUpEvent then
 		-- Useful for things like cancelling autorun, a key has just been released.
