@@ -102,12 +102,8 @@ namespace KST.Settings {
                 if (_luaScriptFromFilename.ContainsKey(e.Name.ToLower())) {
                     try {
                         string script = File.ReadAllText(e.FullPath);
-                        if (_luaScriptFromFilename[e.Name.ToLower()].SetScript(script)) {
-                            Logger.Info($"Updated LUA script {e.Name}");
-                        }
-                        else {
-                            Logger.Warn($"Failed updating LUA script {e.Name}");
-                        }
+                        _luaScriptFromFilename[e.Name.ToLower()].SetScript(script);
+
                     }
                     catch (IOException ex) {
                         Logger.Warn($"Error updating internal LUA for {e.Name}, {ex.Message}", ex);

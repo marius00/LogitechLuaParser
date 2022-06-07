@@ -103,11 +103,10 @@ KeyUpEvent = 3
 FocusEvent = 4
 ";
 
-        private Lua _lua;
+        private readonly Lua _lua;
         private LuaFunction _onEvent;
         private readonly List<string> _targets = new List<string>();
-        private bool _resetStateQueued = false;
-        private string _newScriptQueued = string.Empty;
+        private string _newScriptQueued;
         private readonly LuaIntegration _integration;
 
         public LuaEngine(LogitechLedProvider ledProvider, string script) {
@@ -116,22 +115,23 @@ FocusEvent = 4
             _lua = new Lua();
             _lua.State.Encoding = Encoding.UTF8;
             _lua["provider"] = _integration;
-            _resetStateQueued = false;
-
-            SetScript(script);
-        }
-
-        public void ResetState() {
-            _resetStateQueued = true;
+            _newScriptQueued = script;
         }
 
         public void ExecuteQueuedActions() {
-            if (_resetStateQueued) {
-                _lua?.Dispose();
-                _lua = new Lua();
-                _lua.State.Encoding = Encoding.UTF8;
-                _lua["provider"] = _integration;
-                _resetStateQueued = false;
+            if (!string.IsNullOrEmpty(_newScriptQueued)) {
+
+                try {
+                    _onEvent = null;
+                    _lua.DoString(Hardcoded + _newScriptQueued);
+                    _onEvent = _lua["OnEvent"] as LuaFunction;
+                }
+                catch (NLua.Exceptions.LuaScriptException ex) {
+                    Logger.Error("Error parsing script");
+                    Logger.Error(ex.Message, ex);
+                }
+
+                _newScriptQueued = string.Empty;
             }
 
 
@@ -141,24 +141,19 @@ FocusEvent = 4
             _targets.Add(target);
         }
 
-
-        // TODO: Queue this to run on the Lua thread, to prevent race conditions
-        public bool SetScript(string script) {
-            try {
-                _onEvent = null;
-                _lua.DoString(Hardcoded + script);
-                _onEvent = _lua["OnEvent"] as LuaFunction;
-                return true;
-            }
-            catch (NLua.Exceptions.LuaScriptException ex) {
-                Logger.Error("Error parsing script");
-                Logger.Error(ex.Message, ex);
-            }
-
-            return false;
+        public void SetScript(string script) {
+            _newScriptQueued = script;
         }
 
         public void OnEvent(LuaEventType eventType, string arg, ushort modifiers) {
+            try {
+                ExecuteQueuedActions();
+            }
+            catch (Exception ex) {
+                // Should not happen.. some bug if it does..
+                Logger.Error(ex.Message, ex);
+            }
+
             try {
                 _onEvent?.Call((int)eventType, arg, modifiers);
             }
