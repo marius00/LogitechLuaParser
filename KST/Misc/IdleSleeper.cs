@@ -9,7 +9,7 @@ using log4net;
 namespace KST.Misc {
     internal class IdleSleeper {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(IdleSleeper));
-        private DateTimeOffset _lastActiveTime = DateTimeOffset.UtcNow;
+        private DateTimeOffset _lastActiveTime = DateTimeOffset.UtcNow.AddMinutes(-2);
         private bool _isActive;
         public void SetStatus(bool isActive) {
             if (isActive) {

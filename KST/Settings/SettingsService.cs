@@ -54,7 +54,6 @@ namespace KST.Settings {
                             _luaScriptFromFilename[entry.Path.ToLower()] = engine;
                         }
                         _luaScriptFromProcess[entry.Process] = _luaScriptFromFilename[entry.Path.ToLower()];
-                        _luaScriptFromProcess[entry.Process].AddTarget(entry.Process);
                         Logger.Debug($"Configured \"{entry.Path}\" for \"{entry.Process}\"");
                     } catch (IOException ex) {
                         Logger.Warn(ex.Message, ex);
@@ -102,7 +101,7 @@ namespace KST.Settings {
                 if (_luaScriptFromFilename.ContainsKey(e.Name.ToLower())) {
                     try {
                         string script = File.ReadAllText(e.FullPath);
-                        _luaScriptFromFilename[e.Name.ToLower()].SetScript(script);
+                        _luaScriptFromFilename[e.Name.ToLower()].QueueScriptChange(script);
 
                     }
                     catch (IOException ex) {
@@ -121,6 +120,13 @@ namespace KST.Settings {
             return _luaScriptFromProcess.Keys.Any(key => key.Equals(processName, StringComparison.CurrentCultureIgnoreCase));
         }
 
+        /// <summary>
+        /// Responsible for dispatching keyboard and tick events to specified given process
+        /// </summary>
+        /// <param name="processName"></param>
+        /// <param name="eventType"></param>
+        /// <param name="arg"></param>
+        /// <param name="modifiers"></param>
         public void OnEvent(string processName, LuaEventType eventType, string arg, ushort modifiers) {
             if (!_luaScriptFromProcess.ContainsKey(processName)) {
                 Logger.Error($"Attempting to dispatch event to {processName}, which does not exist.");

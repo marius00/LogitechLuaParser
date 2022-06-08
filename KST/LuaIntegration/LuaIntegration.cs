@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using InputSimulatorStandard;
 using KST.Led;
 using log4net;
@@ -13,20 +10,15 @@ namespace KST.LuaIntegration {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LuaIntegration));
         private readonly LogitechLedProvider _ledProvider;
         private readonly InputSimulator _simulator = new InputSimulator();
-        private readonly List<string> _targets;
         private string _outputPrefix = string.Empty;
 
-        public LuaIntegration(LogitechLedProvider ledProvider, List<string> targets) {
+        public LuaIntegration(LogitechLedProvider ledProvider) {
             _ledProvider = ledProvider;
-            _targets = targets;
         }
-
-        // TODO: This will not scale well, if we have multiple scripts running we'll end up calling Win32.GetForegroundProcessName() N times. It's currently the #1 cause for CPU usage
-        private bool HasFocus => _targets.Any(m => m.Equals(Win32.GetForegroundProcessName(), StringComparison.CurrentCultureIgnoreCase));
+        
 
         public void SetColor(string key, int r, int g, int b) {
-            if (HasFocus)
-                _ledProvider.SetColor(key, r, g, b);
+            _ledProvider.SetColor(key, r, g, b);
         }
 
         public void MouseMove(int x, int y) {
@@ -79,8 +71,6 @@ namespace KST.LuaIntegration {
             } else {
                 Logger.Warn($"Unknown mouse key \"{key}\", expected LMB, RMB or MMB");
             }
-
-
         }
 
 
@@ -89,9 +79,6 @@ namespace KST.LuaIntegration {
         public void KeyDown(string key) {
             if (KeyMapper.IsValidKeyCode(key)) {
                 _simulator.Keyboard.KeyDown(KeyMapper.TranslateToKeyCode(key));
-                if (HasFocus) {
-                    _simulator.Keyboard.KeyDown(KeyMapper.TranslateToKeyCode(key));
-                }
             } else {
                 Logger.Warn($"Invalid key \"{key}\"");
             }
@@ -99,9 +86,7 @@ namespace KST.LuaIntegration {
 
         public void KeyUp(string key) {
             if (KeyMapper.IsValidKeyCode(key)) {
-                if (HasFocus) {
-                    _simulator.Keyboard.KeyUp(KeyMapper.TranslateToKeyCode(key));
-                }
+                _simulator.Keyboard.KeyUp(KeyMapper.TranslateToKeyCode(key));
             } else {
                 Logger.Warn($"Invalid key \"{key}\"");
             }
@@ -109,9 +94,7 @@ namespace KST.LuaIntegration {
 
         public void KeyPress(string key) {
             if (KeyMapper.IsValidKeyCode(key)) {
-                if (HasFocus) {
-                    _simulator.Keyboard.KeyPress(KeyMapper.TranslateToKeyCode(key));
-                }
+                _simulator.Keyboard.KeyPress(KeyMapper.TranslateToKeyCode(key));
             } else {
                 Logger.Warn($"Invalid key \"{key}\"");
             }
