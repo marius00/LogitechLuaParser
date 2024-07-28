@@ -1,3 +1,5 @@
+require "core"
+
 -- Red: 0%, Green: 100%, Blue: 100%
 SetBacklightColor('W', 0, 100, 0)
 SetBacklightColor('S', 0, 100, 0)

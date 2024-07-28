@@ -156,15 +156,19 @@ namespace KST {
         private static void CopyInitialFiles() {
             string appResFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources");
             
-            if (!File.Exists(AppPaths.SettingsFile)) {
-                Logger.Info($"First run detected, copying example files to {AppPaths.SettingsFolder}");
+            //if (!File.Exists(AppPaths.SettingsFile)) {
+            Logger.Info($"First run detected, copying example files to {AppPaths.SettingsFolder}");
 
-                foreach (string filename in Directory.GetFiles(appResFolder, "*.*", SearchOption.TopDirectoryOnly)) {
-                    if (Path.GetExtension(filename) == ".json" || Path.GetExtension(filename) == ".lua") {
-                        File.Copy(filename, filename.Replace(appResFolder, AppPaths.SettingsFolder), false);
-                    }
+            foreach (string filename in Directory.GetFiles(appResFolder, "*.*", SearchOption.TopDirectoryOnly)) {
+                if (Path.GetExtension(filename) == ".json" || Path.GetExtension(filename) == ".lua") {
+                var target = filename.Replace(appResFolder, AppPaths.SettingsFolder);
+                if (!File.Exists(target))
+                {
+                    File.Copy(filename, filename.Replace(appResFolder, AppPaths.SettingsFolder), false);
+                }
                 }
             }
+            //}
 
             LgsProfileUtil.Install();
             GHubProfileUtil.Install();
