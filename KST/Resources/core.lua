@@ -1,8 +1,15 @@
+-- Core functionality for KST
+-- It is not considered safe to edit this file.
+-- This file will be overwritten at will.
+
 function OutputLogMessage(...)
     provider:OutputLogMessage(...)
 end
 
+
+core_keyboard_color_map = {}
 function SetBacklightColor(k, r, g, b)
+    core_keyboard_color_map[k] = table.pack(k, r, g, b)
     provider:SetColor(k, r, g, b)
 end
 
@@ -76,6 +83,12 @@ end
 
 function SetOutputPrefix(prefix)
     provider:SetOutputPrefix(prefix)
+end
+
+function RestoreColors()
+    for k,v in pairs(core_keyboard_color_map) do
+        provider:SetColor(table.unpack(v))
+	end
 end
 
 

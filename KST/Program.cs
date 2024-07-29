@@ -118,6 +118,7 @@ namespace KST {
                             if (lastProcessRelevant) {
                                 // Notify the last relevant process that it lost focus
                                 settingsService.OnEvent(lastProcess, LuaEventType.Focus, "false", 0);
+                                LogitechGSDK.LogiLedRestoreLighting();
                             }
                             lastProcessRelevant = false;
                         }
@@ -156,19 +157,22 @@ namespace KST {
         private static void CopyInitialFiles() {
             string appResFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "resources");
             
-            //if (!File.Exists(AppPaths.SettingsFile)) {
-            Logger.Info($"First run detected, copying example files to {AppPaths.SettingsFolder}");
+            Logger.Info($"Copying missing files, if any.. to {AppPaths.SettingsFolder}");
 
             foreach (string filename in Directory.GetFiles(appResFolder, "*.*", SearchOption.TopDirectoryOnly)) {
                 if (Path.GetExtension(filename) == ".json" || Path.GetExtension(filename) == ".lua") {
-                var target = filename.Replace(appResFolder, AppPaths.SettingsFolder);
-                if (!File.Exists(target))
-                {
-                    File.Copy(filename, filename.Replace(appResFolder, AppPaths.SettingsFolder), false);
-                }
+                    var target = filename.Replace(appResFolder, AppPaths.SettingsFolder);
+                    if (!File.Exists(target)) {
+                        File.Copy(filename, filename.Replace(appResFolder, AppPaths.SettingsFolder), false);
+                        Logger.Info($"Copying {filename}..");
+                    }
                 }
             }
-            //}
+
+            // Core.lua is native to KST, just overwrite it at will.
+            if (File.Exists(Path.Combine(appResFolder, "core.lua"))) {
+                File.Copy(Path.Combine(appResFolder, "core.lua"), Path.Combine(appResFolder, "core.lua").Replace(appResFolder, AppPaths.SettingsFolder), true);
+            }
 
             LgsProfileUtil.Install();
             GHubProfileUtil.Install();

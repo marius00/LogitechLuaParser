@@ -110,6 +110,7 @@ function OnEvent(event, arg, modifiers)
 		
 		if arg == 'true' then
 			OutputHelpText()
+			RestoreColors()
 		end
 		
 	elseif event == KeyDownEvent then

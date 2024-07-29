@@ -53,7 +53,6 @@ function ks_OnEvent(event, arg, modifiers)
 			if ks_activeKeys[ks_setup[arg]] ~= nil then
 				ks_activeKeys[ks_setup[arg]] = nil
 				OutputLogMessage('Stopped spamming key "{0}"', ks_setup[arg])
-				OutputLogMessage('Trigger is {0} and color is {1}', arg, ks_colormapOverride[arg])
 				SetBacklightColor(ks_colormapOverride[arg], 100, 0, 0)
 			else
 				ks_activeKeys[ks_setup[arg]] = true

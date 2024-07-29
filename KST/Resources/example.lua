@@ -48,6 +48,11 @@ function OnEvent(event, arg, modifiers)
 		if arg == 'false' and active then
 			active = false -- Auto disable G8 when alt-tabbing out of the game.
 		end
+
+		-- Restore any colors that were set when we alt-tabbed out (optional)
+		if arg == "true" then
+			RestoreColors()
+		end
 	elseif event == KeyDownEvent then
 		-- A key has been pressed
 		-- Arg will contain the relevant key, modifiers will contain information about Shift, Alt, Ctrl, M1..

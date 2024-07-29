@@ -17,6 +17,7 @@ namespace KST.Led {
             _isInitialized = LogitechGSDK.LogiLedInitWithName("LogitechLua");
             if (_isInitialized) {
                 LogitechGSDK.LogiLedSetTargetDevice(LogitechGSDK.LOGI_DEVICETYPE_ALL);
+                LogitechGSDK.LogiLedSaveCurrentLighting();
             }
             else {
                 Logger.Warn("Error initializing logitech LED driver");
@@ -43,6 +44,7 @@ namespace KST.Led {
             else {
                 Logger.Debug($"Setting color for {key} to ({r}, {g}, {b})");
                 LogitechGSDK.LogiLedSetLightingForKeyWithKeyName(KeyMapper.TranslateToLogitechMapping(key), r, g, b);
+                
             }
         }
 

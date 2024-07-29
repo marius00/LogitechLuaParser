@@ -68,6 +68,8 @@ The integration has been verified to work, but no detailed setup guide for G-Hub
 **When you start this program for the first time, it will start minimized to tray.**  
 The program is running, look for it down in the bottom right corner.
 
+Obs: May also need to click the "Allow games & applications to control illumination" setting in G-Hub
+
 
 ## Lua configuration  
 

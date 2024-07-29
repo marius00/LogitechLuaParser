@@ -57,6 +57,7 @@ function OnEvent(event, arg, modifiers)
 	elseif event == FocusEvent then
 		if arg == 'true' then
 			OutputHelpText()
+			RestoreColors()
 		end
 	elseif event == KeyUpEvent then
 		if arg == 'F3' then
