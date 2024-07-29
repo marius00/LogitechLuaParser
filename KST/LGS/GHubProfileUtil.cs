@@ -49,6 +49,16 @@ namespace KST.LGS {
             newJson = token.ToString();
             return numChanges > 0;
         }
+        private static bool AllowsLedApi(string json) {
+            JToken token = JToken.Parse(json);
+            var integrationManagerSettings= token.SelectToken("integration_manager_settings");
+            if (integrationManagerSettings == null) {
+                return false;
+            }
+
+            var allowLedSdk = integrationManagerSettings.SelectToken("allowLedSdk");
+            return allowLedSdk.Value<bool>();
+        }
 
         private static string GetGHubJson() {
             using (var con = new SQLiteConnection($"Data Source={LogitechPaths.GHubConfig}")) {
@@ -76,6 +86,7 @@ namespace KST.LGS {
         }
 
         public static void Install() {
+
             if (!File.Exists(LogitechPaths.GHubConfig)) {
                 Logger.Info("GHub profile not found, skipping G-hub configuration");
                 return;
@@ -85,7 +96,14 @@ namespace KST.LGS {
                 Logger.Info("Verifying G-Hub configuration");
                 string assemblyPath = Assembly.GetEntryAssembly().Location.Replace("\\\\", "\\").ToUpperInvariant();
 
-                if (!AddExeToJson(GetGHubJson(), assemblyPath, out var json)) {
+                var ghubJson = GetGHubJson();
+                if (AllowsLedApi(ghubJson)) {
+                    Logger.Info("G-Hub is configured to allow third party programs to use the LED API");
+                } else {
+                    Logger.Warn("G-Hub is not configured to allow third party programs to use the LED API, SetBacklightColor() will not function properly.");
+                }
+
+                if (!AddExeToJson(ghubJson, assemblyPath, out var json)) {
                     Logger.Info("No changes required for G-Hub");
                     return;
                 }
